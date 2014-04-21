@@ -24,8 +24,8 @@ public class SphereController : MonoBehaviour {
 		adhesionForce = -collision.contacts[0].normal;
 		adhesionForce.Normalize();
 		adhesionForce *= Physics.gravity.magnitude;
-
-		Vector3 v = rigidbody.velocity;
+		//for testing
+		/*Vector3 v = rigidbody.velocity;
 		Vector3 j = -adhesionForce.normalized * jumpHeight;
 		Vector3 a = Vector3.Cross(Vector3.up, j);
 		a = Vector3.Project(v, a);
@@ -36,11 +36,10 @@ public class SphereController : MonoBehaviour {
 		Debug.DrawLine(transform.position, transform.position + a/3, Color.red);
 		Debug.DrawLine(transform.position, transform.position + b/3, Color.blue);
 		Debug.DrawLine(transform.position, transform.position + v/3);
-		Debug.DrawLine(transform.position, transform.position + rigidbody.velocity/3, Color.magenta);
+		Debug.DrawLine(transform.position, transform.position + rigidbody.velocity/3, Color.magenta);*/
 	}
 
 	void OnTriggerExit () {
-		adhesionForce = Vector3.down;
 		onGround = false;
 	}
 
@@ -50,10 +49,11 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void move () {
-		//apply rotation to graphics!! (?)
 		if (Input.GetAxis("Vertical") != 0) {
-			//rigidbody.AddTorque (Camera.main.transform.forward * -Input.GetAxis("Horizontal") * Time.fixedDeltaTime * speed);
 			Vector3 forwardVector = Vector3.Cross(-adhesionForce, Camera.main.transform.right);
+			if (spider) {
+				forwardVector = Vector3.Cross(-adhesionForce, Camera.main.transform.right);
+			}
 			forwardVector.Normalize();
 			Vector3 forwardVelocity = Vector3.Project(rigidbody.velocity, forwardVector);
 			if (forwardVelocity.magnitude < speed) {
@@ -61,7 +61,6 @@ public class SphereController : MonoBehaviour {
 			}
 		}
 		if (Input.GetAxis("Horizontal") != 0) {
-			//rigidbody.AddTorque (Camera.main.transform.right * Input.GetAxis("Vertical") * Time.fixedDeltaTime * speed);
 			Vector3 rightVector = Vector3.Cross(-adhesionForce, Camera.main.transform.forward);
 			rightVector.Normalize();
 			Vector3 rightVelocity = Vector3.Project(rigidbody.velocity, rightVector);
@@ -70,7 +69,8 @@ public class SphereController : MonoBehaviour {
 			}
 		}
 		//jump orthogonal to ground
-		if (Input.GetButton("Jump") && onGround) {
+		//could just as well use impulse, just saying ... xD
+		if (Input.GetButtonDown("Jump") && onGround) {
 			Vector3 v = rigidbody.velocity;
 			//components of velocity: a, b, j(umpvector: already scaled by jumpheight), all orthogonal
 			Vector3 j = -adhesionForce.normalized * jumpHeight;
@@ -93,6 +93,7 @@ public class SphereController : MonoBehaviour {
 			rigidbody.AddForce(adhesionForce);
 		} 
 		else {
+			//adhesionForce = Vector3.down;
 			rigidbody.useGravity = true;
 		}
 		//test

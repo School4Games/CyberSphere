@@ -20,7 +20,6 @@ public class MovingPlatform : MonoBehaviour {
 		waypoints [0] = transform.position;
 		//set positions of children as waypoints
 		for (int i = 0; i < waypoints.Length-1; i++) {
-			Debug.Log(i);
 			waypoints[i+1] = transform.GetChild(i).position;
 			Destroy(transform.GetChild(i).gameObject);
 		}

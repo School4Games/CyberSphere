@@ -41,18 +41,33 @@ public class TPCamera : MonoBehaviour {
 			upVector = -sphereController.adhesionForce;
 			float angle = Vector3.Angle(Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
 			if (angle > 0 && upVector.normalized != transform.up && transform.forward != upVector.normalized) {
-				transform.RotateAround(transform.position, transform.forward, angle/10);
+				int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
+				transform.RotateAround(transform.position, p * transform.forward, Mathf.Sqrt(angle/10));
 			}
 		}
 		else if (!sphereController.spider && upVector.normalized != transform.up) {
+			upVector = Vector3.up;
 			float angle = Vector3.Angle(Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
-			transform.RotateAround(transform.position, transform.forward, angle/10);
+			int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
+			transform.RotateAround(transform.position, p * transform.forward, Mathf.Sqrt(angle/10));
+		}
+	}
+
+	//returns 1 if clockwise, -1 if counterclockwise
+	//can you put stuff like this in some sort of library?
+	int clockwisePrefix (Vector3 axis, Vector3 direction, Vector3 targetDirection) {
+		if (Vector3.Angle(Vector3.Cross(targetDirection, direction), axis) < 90) {
+			return 1;
+		}
+		else {
+			return -1;
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//broken for some reason xD
+		//rotates the camera
 		checkUp ();
 	}
 }
