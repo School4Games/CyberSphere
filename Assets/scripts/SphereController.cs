@@ -98,11 +98,26 @@ public class SphereController : MonoBehaviour {
 		Vector3 axis = Vector3.Cross(-adhesionForce, rigidbody.velocity);
 		graphics.Rotate(axis, angle, Space.World);
 	}
+
+	void adjustFOV () {
+		Vector3 upVector = Vector3.up;
+		if (spider) {
+			upVector = -adhesionForce;
+		}
+		Vector3 forwardVector = Vector3.Cross(Camera.main.transform.right, upVector);
+		Vector3 rightVector = Vector3.Cross(Camera.main.transform.forward, upVector);
+
+		if (Vector3.Angle(rigidbody.velocity, forwardVector) < 45) {
+			float fov = (1 + Mathf.Sqrt(rigidbody.velocity.magnitude / maxSpeed)/2) * 60;
+			Camera.main.fieldOfView = fov;
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		move ();
 		spinGraphics ();
+		adjustFOV ();
 		//turn off gravity when hanging on wall
 		if (spider && onGround) {
 			//make "stickier" somehow
@@ -115,6 +130,9 @@ public class SphereController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.T)) {
 			spider = !spider;
 		}
-		Debug.Log(rigidbody.velocity.magnitude);
+		//cool
+		Color newColor = graphics.renderer.material.color;
+		newColor.r -= Time.deltaTime * 2;
+		graphics.renderer.material.color = newColor;
 	}
 }

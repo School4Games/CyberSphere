@@ -11,17 +11,40 @@ public class MovingPlatform : MonoBehaviour {
 	public float speed = 1;
 
 	//make automatic for comfort!
-	Vector3[] waypoints;
+	public Vector3[] waypoints;
 	//index of next waypoint
 	int target = 1;
 
 	void setWaypoints () {
-		waypoints = new Vector3[transform.childCount+1];
+		//count waypoints
+		int wpCount = 0;
+		for (int i = 0; i < transform.childCount; i++) {
+			string name = transform.GetChild(i).gameObject.name;
+			int isWayPoint = name.CompareTo("waypoint");
+			if (isWayPoint == 1) {
+				wpCount++;
+				Debug.Log (wpCount);
+			}
+		}
+		waypoints = new Vector3[wpCount+1];
 		waypoints [0] = transform.position;
 		//set positions of children as waypoints
 		for (int i = 0; i < waypoints.Length-1; i++) {
-			waypoints[i+1] = transform.GetChild(i).position;
-			Destroy(transform.GetChild(i).gameObject);
+			int index = i;
+			string name = transform.GetChild(i).gameObject.name;
+			int isWayPoint = name.CompareTo("waypoint");
+			while (isWayPoint != 1) {
+				index++;
+				if (!transform.GetChild(index)) {
+					return;
+				}
+				name = transform.GetChild(index).gameObject.name;
+				isWayPoint = name.CompareTo("waypoint");
+			}
+			if (isWayPoint == 1) {
+				waypoints[i+1] = transform.GetChild(index).position;
+				Destroy(transform.GetChild(index).gameObject);
+			}
 		}
 	}
 
