@@ -11,6 +11,8 @@ public class TPCamera : MonoBehaviour {
 	//changes when spidershere activates
 	Vector3 upVector = Vector3.up;
 
+	//add more params for handling ... ask Tim
+
 	void follow () {
 		transform.position = player.position - transform.forward * 5;
 	}
@@ -42,7 +44,7 @@ public class TPCamera : MonoBehaviour {
 			float angle = Vector3.Angle(Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
 			if (angle > 0 && upVector.normalized != transform.up && transform.forward != upVector.normalized) {
 				int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
-				transform.RotateAround(transform.position, p * transform.forward, Mathf.Sqrt(angle/10));
+				transform.RotateAround(transform.position, p * transform.forward, Mathf.Min(Mathf.Sqrt(angle/10), 2));
 			}
 		}
 		else if (!sphereController.spider && upVector.normalized != transform.up) {
