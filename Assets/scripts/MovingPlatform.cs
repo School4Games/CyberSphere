@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public class Waypoint {
+	public Vector3 position = Vector3.zero;
+	public Vector3 rotation = Vector3.zero;
+}
+
+[RequireComponent(typeof (MovingPlatformsEditorStuff))]
 public class MovingPlatform : MonoBehaviour {
 
 	public bool pingPong;
@@ -10,28 +17,39 @@ public class MovingPlatform : MonoBehaviour {
 	//in unitymeters/second
 	public float speed = 1;
 
-	//make automatic for comfort!
-	public Vector3[] waypoints;
+	Waypoint[] waypoints;
+
+	public float[] waitForSeconds = {1, 2};
+	float countdown = 1;
+
 	//index of next waypoint
 	int target = 1;
+	//last waypoint, needed for waiting at said waypoint
+	int lasttarget = 0;
 
 	void setWaypoints () {
 		//count waypoints
+		//then initialize field of that length
 		int wpCount = 0;
 		for (int i = 0; i < transform.childCount; i++) {
 			string name = transform.GetChild(i).gameObject.name;
 			int isWayPoint = name.CompareTo("waypoint");
 			if (isWayPoint == 1) {
 				wpCount++;
-				Debug.Log (wpCount);
 			}
 		}
-		waypoints = new Vector3[wpCount+1];
-		waypoints [0] = transform.position;
-		//set positions of children as waypoints
-		for (int i = 0; i < waypoints.Length-1; i++) {
-			int index = i;
-			string name = transform.GetChild(i).gameObject.name;
+		waypoints = new Waypoint[wpCount+1];
+		for (int i = 0; i < waypoints.Length; i++) {
+			waypoints[i] = new Waypoint();
+		}
+
+		//fill with position and rotation of waypoints
+		waypoints[0].position = transform.position;
+		waypoints[0].rotation = transform.eulerAngles;
+		//set positions and rotations of children as waypoints
+		int index = 0;
+		for (int i = 1; i < waypoints.Length; i++) {
+			string name = transform.GetChild(index).gameObject.name;
 			int isWayPoint = name.CompareTo("waypoint");
 			while (isWayPoint != 1) {
 				index++;
@@ -42,23 +60,41 @@ public class MovingPlatform : MonoBehaviour {
 				isWayPoint = name.CompareTo("waypoint");
 			}
 			if (isWayPoint == 1) {
-				waypoints[i+1] = transform.GetChild(index).position;
+				waypoints[i].position = transform.GetChild(index).position;
+				waypoints[i].rotation = transform.GetChild(index).eulerAngles;
 				Destroy(transform.GetChild(index).gameObject);
+				index++;
 			}
 		}
 	}
 
 	void followWaypoints () {
-		Vector3 direction = waypoints[target] - transform.position;
+		countdown = Mathf.Max(countdown - Time.deltaTime, 0);
+		Vector3 direction = waypoints[target].position - transform.position;
 		//check if it would pass the waypoint in the next frame
 		//move one step towards target if it doesn't
-		if (direction.magnitude > (direction.normalized * Time.deltaTime * speed).magnitude) {
-			transform.position += direction.normalized * Time.deltaTime * speed;
+		if (direction.magnitude > (direction.normalized * Time.deltaTime * speed).magnitude || countdown > 0) {
+			Vector3 step = direction.normalized * Time.deltaTime * speed;
+			if (countdown > 0) {
+				step = Vector3.zero;
+			}
+			transform.position += step;
+			//calculate fraction of distance covered this frame
+			float t = step.magnitude / direction.magnitude;
+			if (countdown > 0) {
+				t = Time.deltaTime / countdown;
+			}
+			transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, waypoints[target].rotation, t);
 		}
-		else {
+		else if (countdown == 0) {
+			//reset countdown
+			countdown = waitForSeconds[target];
+			lasttarget = target;
+
 			float outstandingMovement = (direction.normalized * Time.deltaTime * speed).magnitude - direction.magnitude;
 			//set to position
-			transform.position = waypoints[target];
+			transform.position = waypoints[target].position;
+			transform.eulerAngles = waypoints[target].rotation;
 			//change target
 			//not pingpong-style
 			if (!pingPong) {
@@ -92,7 +128,7 @@ public class MovingPlatform : MonoBehaviour {
 				}
 			}
 			//add missing part of movement
-			direction = waypoints[target] - transform.position;
+			direction = waypoints[target].position - transform.position;
 			transform.position += direction.normalized * Time.deltaTime * outstandingMovement;
 		}
 	}
@@ -100,6 +136,7 @@ public class MovingPlatform : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		setWaypoints ();
+		countdown = waitForSeconds[lasttarget];
 	}
 	
 	// Update is called once per frame

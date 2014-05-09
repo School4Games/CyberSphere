@@ -52,6 +52,7 @@ public class SphereController : MonoBehaviour {
 
 	void OnTriggerExit () {
 		onGround = false;
+		transform.parent = null;
 	}
 
 	// Use this for initialization
@@ -66,24 +67,21 @@ public class SphereController : MonoBehaviour {
 		}
 		Vector3 forwardVector = Vector3.Cross(upVector, Camera.main.transform.right);
 		Vector3 rightVector = Vector3.Cross(upVector, Camera.main.transform.forward);
-		if (Input.GetAxis("Vertical") != 0) {
-			if (Vector3.Angle(forwardVector * Input.GetAxis("Vertical"), -adhesionForce) > 90 - maxSlopeAngle || spider) {
-				forwardVector.Normalize();
-				//Vector3 forwardVelocity = Vector3.Project(rigidbody.velocity, forwardVector);
-				//pretty simple way to almost ignore momentum
-				Vector3 upwardVelocity = Vector3.Project(rigidbody.velocity, upVector);
-				rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, forwardVector * maxSpeed * -Input.GetAxis("Vertical") + upwardVelocity, zeroToMaxTime);
-			}
+
+		Vector3 inputDirection = (rightVector * Input.GetAxis("Horizontal") + forwardVector * -Input.GetAxis("Vertical")).normalized;
+		inputDirection *= Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal")));
+
+		//what exactly was i thinking here? - - < ??? -_- works, though
+		if (Vector3.Angle(-inputDirection, -adhesionForce) < 90 - maxSlopeAngle || spider) {
+			inputDirection = Vector3.zero;
 		}
-		if (Input.GetAxis("Horizontal") != 0) {
-			if (Vector3.Angle(rightVector * -Input.GetAxis("Horizontal"), -adhesionForce) > 90 - maxSlopeAngle || spider) {
-				rightVector.Normalize();
-				//Vector3 rightVelocity = Vector3.Project(rigidbody.velocity, rightVector);
-				//pretty simple way to almost ignore momentum 
-				Vector3 upwardVelocity = Vector3.Project(rigidbody.velocity, upVector);
-				rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, rightVector * maxSpeed * Input.GetAxis("Horizontal") + upwardVelocity, zeroToMaxTime);
-			}
-		}
+
+		forwardVector.Normalize();
+		rightVector.Normalize();
+		//pretty simple way to almost ignore momentum 
+		Vector3 upwardVelocity = Vector3.Project(rigidbody.velocity, upVector);
+		rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, inputDirection * maxSpeed + upwardVelocity, zeroToMaxTime);
+
 		//jump orthogonal to ground
 		//could just as well use impulse, just saying ... xD
 		if (Input.GetButtonDown("Jump") && onGround) {
@@ -108,7 +106,7 @@ public class SphereController : MonoBehaviour {
 		Vector3 rightVector = Vector3.Cross(Camera.main.transform.forward, upVector);
 
 		if (Vector3.Angle(rigidbody.velocity, forwardVector) < 45) {
-			float fov = (1 + Mathf.Sqrt(rigidbody.velocity.magnitude / maxSpeed)/2) * 60;
+			float fov = (1 + Mathf.Sqrt(Mathf.Max(rigidbody.velocity.magnitude - maxSpeed, 0) / maxSpeed)/2) * 60;
 			Camera.main.fieldOfView = fov;
 		}
 	}
@@ -117,7 +115,7 @@ public class SphereController : MonoBehaviour {
 	void Update () {
 		move ();
 		spinGraphics ();
-		adjustFOV ();
+		//adjustFOV ();
 		//turn off gravity when hanging on wall
 		if (spider && onGround) {
 			//make "stickier" somehow
@@ -126,9 +124,11 @@ public class SphereController : MonoBehaviour {
 		else {
 			rigidbody.AddForce(gravity);
 		}
-		//test
-		if (Input.GetKeyDown(KeyCode.T)) {
-			spider = !spider;
+		if (Input.GetButton("Fire2")) {
+			spider = true;
+		}
+		else {
+			spider = false;
 		}
 		//cool
 		Color newColor = graphics.renderer.material.color;
