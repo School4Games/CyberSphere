@@ -1,10 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\Laser.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\test\Assets\Scenes\Spielzeugladen\Scripts\Systems\MovementSystem.cs">
     <Files>
-      <File FileName="Assets\scripts\MovingPlatform.cs" Line="85" Column="36" />
-      <File FileName="Assets\scripts\SphereController.cs" Line="136" Column="47" />
-      <File FileName="Assets\scripts\Laser.cs" Line="35" Column="49" />
+      <File FileName="..\..\test\Assets\Scenes\Spielzeugladen\Scripts\Systems\MovementSystem.cs" Line="74" Column="58" />
+      <File FileName="..\..\test\Assets\Scenes\Spielzeugladen\Scripts\Systems\MovementJumpTrigger.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

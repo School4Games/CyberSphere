@@ -10,8 +10,8 @@ public class MovingPlatformsEditorStuff : MonoBehaviour {
 		int wpCount = 0;
 		for (int i = 0; i < transform.childCount; i++) {
 			string name = transform.GetChild(i).gameObject.name;
-			int isWayPoint = name.CompareTo("waypoint");
-			if (isWayPoint == 1) {
+			bool isWayPoint = name.Contains("waypoint");
+			if (isWayPoint) {
 				wpCount++;
 			}
 		}
