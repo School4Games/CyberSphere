@@ -10,7 +10,9 @@ public class Waypoint {
 [RequireComponent(typeof (MovingPlatformsEditorStuff))]
 public class MovingPlatform : MonoBehaviour {
 	
-	public bool pingPong;
+	public enum modes {pingPong, loop};
+	public modes mode;
+
 	//which way does it go through the waypoints
 	bool ping = true;
 	
@@ -96,8 +98,8 @@ public class MovingPlatform : MonoBehaviour {
 			transform.position = waypoints[target].position;
 			transform.eulerAngles = waypoints[target].rotation;
 			//change target
-			//not pingpong-style
-			if (!pingPong) {
+			//loop-style
+			if (mode == modes.loop) {
 				if (target+1 <= waypoints.Length-1) {
 					target++;
 				}

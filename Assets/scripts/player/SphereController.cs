@@ -6,15 +6,25 @@ public class SphereController : MonoBehaviour {
 	public bool spider = true;
 	public Vector3 adhesionForce = Vector3.down;
 
+	//[um/s] (unitymeters per second)
 	public float maxSpeed = 10;
 
+	//[um/s]
 	public float maxFallSpeed = 20;
 
+	//[s]
 	public float zeroToMaxTime = 0.5f;
 
-	public float jumpHeight = 4;
+	//[um]
+	public float jumpHeight = 2;
 
+	//additional height gained when jumping holding down space
+	//[um]
+	public float additionalJumpHeight = 2;
+
+	//[um/s²]
 	public Vector3 gravity = Vector3.down * 20;
+	float gravityMultiplier = 1;
 
 	public Transform graphics;
 
@@ -61,7 +71,6 @@ public class SphereController : MonoBehaviour {
 		Debug.DrawLine(transform.position, transform.position + v/3);
 		Debug.DrawLine(transform.position, transform.position + rigidbody.velocity/3, Color.magenta);*/
 	}
-
 	// Use this for initialization
 	void Start () {
 		rigidbody.useGravity = false;
@@ -93,11 +102,18 @@ public class SphereController : MonoBehaviour {
 		rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, inputDirection * maxSpeed + upwardVelocity, zeroToMaxTime);
 
 		//jump orthogonal to ground
-		//could just as well use impulse, just saying ... xD
 		if (Input.GetButtonDown("Jump") && onGround) {
+			//do calculation at start? somehow buggy at low framerates, though, best fix first
 			Vector3 v0 = new Vector3(0, Mathf.Sqrt(-2 * jumpHeight * gravity.y), 0);
 			v0 = -adhesionForce.normalized * v0.magnitude;
 			rigidbody.AddForce(v0, ForceMode.VelocityChange);
+		}
+		if (Input.GetButton("Jump")) {
+			float v0 = Mathf.Sqrt(-2 * jumpHeight * gravity.y);
+			gravityMultiplier  = v0*v0/((jumpHeight+additionalJumpHeight)*gravity.magnitude)/2;
+		}
+		else {
+			gravityMultiplier  = 1;
 		}
 	}
 
@@ -132,7 +148,7 @@ public class SphereController : MonoBehaviour {
 			rigidbody.AddForce(adhesionForce);
 		} 
 		else {
-			rigidbody.AddForce(gravity);
+			rigidbody.AddForce(gravity*gravityMultiplier);
 		}
 		if (Input.GetButton("Fire2")) {
 			spider = true;
