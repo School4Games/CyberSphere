@@ -22,14 +22,25 @@ public class SphereController : MonoBehaviour {
 	public float maxSlopeAngle = 45;
 
 	bool onGround = false;
+	int groundColliders = 0;
 
-	void OnTriggerStay () {
+	void OnTriggerEnter () {
+		groundColliders++;
 		onGround = true;
 	}
 
 	void OnCollisionEnter (Collision collision) {
 		//for "friction" moving platforms etc
 		//transform.parent = collision.collider.gameObject.transform;
+	}
+
+	void OnTriggerExit () {
+		groundColliders--;
+		if (groundColliders <= 0) {
+			groundColliders = 0;
+			onGround = false;
+		}
+		transform.parent = null;
 	}
 
 	void OnCollisionStay (Collision collision) {
@@ -51,11 +62,6 @@ public class SphereController : MonoBehaviour {
 		Debug.DrawLine(transform.position, transform.position + rigidbody.velocity/3, Color.magenta);*/
 	}
 
-	void OnTriggerExit () {
-		onGround = false;
-		transform.parent = null;
-	}
-
 	// Use this for initialization
 	void Start () {
 		rigidbody.useGravity = false;
@@ -63,7 +69,7 @@ public class SphereController : MonoBehaviour {
 
 	void move () {
 		Vector3 upVector = Vector3.up;
-		if (spider) {
+		if (spider && onGround) {
 			upVector = -adhesionForce;
 		}
 		Vector3 forwardVector = -Vector3.Cross(upVector, Camera.main.transform.right);
