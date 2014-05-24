@@ -27,6 +27,10 @@ public class SphereController : MonoBehaviour {
 	float gravityMultiplier = 1;
 
 	public Transform graphics;
+	//time until sphere aligns with movement direction
+	//[s]
+	public float tumbleTime = 2;
+	float tumbleCountDown;
 
 	//not used yet
 	public float maxSlopeAngle = 45;
@@ -73,6 +77,7 @@ public class SphereController : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
+		tumbleCountDown = tumbleTime;
 		rigidbody.useGravity = false;
 	}
 
@@ -118,9 +123,36 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void spinGraphics () {
+		if (rigidbody.velocity.magnitude >= maxSpeed * 0.9f) {
+			Debug.Log ("swoosh");
+			tumbleCountDown -= Time.deltaTime;
+			if (tumbleCountDown <= 0) {
+				//align with movement direction
+				float straightAngle = Vector3.Angle(graphics.forward, Vector3.Cross(-adhesionForce, rigidbody.velocity));
+				straightAngle = Mathf.Sqrt (straightAngle)/2;
+				Vector3 straightAxis = rigidbody.velocity;
+				int p = clockwisePrefix (straightAxis, graphics.forward, Vector3.Cross(rigidbody.velocity, -adhesionForce));
+				graphics.Rotate(straightAxis, p * straightAngle, Space.World);
+			}
+		}
+		else {
+			Debug.Log ("...");
+			tumbleCountDown = tumbleTime;
+		}
 		float angle = 360 * ((rigidbody.velocity.magnitude * Time.deltaTime)/(2*Mathf.PI));
 		Vector3 axis = Vector3.Cross(-adhesionForce, rigidbody.velocity);
 		graphics.Rotate(axis, angle, Space.World);
+	}
+
+	//returns 1 if clockwise, -1 if counterclockwise
+	//can you put stuff like this in some sort of library?
+	int clockwisePrefix (Vector3 axis, Vector3 direction, Vector3 targetDirection) {
+		if (Vector3.Angle(Vector3.Cross(targetDirection, direction), axis) < 90) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
 	}
 
 	void adjustFOV () {
