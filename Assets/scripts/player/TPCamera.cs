@@ -41,17 +41,33 @@ public class TPCamera : MonoBehaviour {
 		SphereController sphereController = player.GetComponent ("SphereController") as SphereController;
 		if (sphereController.spider && sphereController.adhesionForce != Vector3.zero) {
 			upVector = -sphereController.adhesionForce;
-			float angle = Vector3.Angle(Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
-			if (angle > 0 && upVector.normalized != transform.up && transform.forward != upVector.normalized) {
-				int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
-				transform.RotateAround(transform.position, p * transform.forward, Mathf.Min(Mathf.Sqrt(angle/10), 2));
+			//if upside down
+			if (Vector3.Angle(transform.up, upVector) > 90) {
+				float angle0 = Vector3.Angle(transform.up, upVector);
+				int p0 = clockwisePrefix (transform.right, transform.up, upVector);
+				transform.RotateAround(transform.position, p0 * -transform.right, Mathf.Sqrt(angle0/10));
+			}
+			else {
+				float angle = Vector3.Angle(Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
+				if (angle > 0 && upVector.normalized != transform.up && transform.forward != upVector.normalized) {
+					int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
+					transform.RotateAround(transform.position, p * transform.forward, Mathf.Min(Mathf.Sqrt(angle/10), 2));
+				}
 			}
 		}
 		else if (!sphereController.spider && upVector.normalized != transform.up) {
 			upVector = Vector3.up;
-			float angle = Vector3.Angle(Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
-			int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
-			transform.RotateAround(transform.position, p * transform.forward, Mathf.Sqrt(angle/10));
+			//if upside down
+			if (Vector3.Angle(transform.up, upVector) > 90) {
+				float angle0 = Vector3.Angle(transform.up, upVector);
+				int p0 = clockwisePrefix (transform.right, transform.up, upVector);
+				transform.RotateAround(transform.position, p0 * -transform.right, Mathf.Sqrt(angle0/10));
+			}
+			else {
+				float angle = Vector3.Angle(Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
+				int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
+				transform.RotateAround(transform.position, p * transform.forward, Mathf.Sqrt(angle/10));
+			}
 		}
 	}
 
