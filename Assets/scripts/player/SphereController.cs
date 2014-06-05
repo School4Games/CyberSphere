@@ -124,7 +124,6 @@ public class SphereController : MonoBehaviour {
 
 	void spinGraphics () {
 		if (rigidbody.velocity.magnitude >= maxSpeed * 0.9f) {
-			Debug.Log ("swoosh");
 			tumbleCountDown -= Time.deltaTime;
 			if (tumbleCountDown <= 0) {
 				//align with movement direction
@@ -136,7 +135,6 @@ public class SphereController : MonoBehaviour {
 			}
 		}
 		else {
-			Debug.Log ("...");
 			tumbleCountDown = tumbleTime;
 		}
 		float angle = 360 * ((rigidbody.velocity.magnitude * Time.deltaTime)/(2*Mathf.PI));

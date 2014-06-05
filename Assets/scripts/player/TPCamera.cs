@@ -15,11 +15,26 @@ public class TPCamera : MonoBehaviour {
 
 	SphereController sphereController;
 
-	//add more params for handling ... ask Tim
-	
+	//lolz @ distance :D makes sense, though
 	void follow () {
+		//follow (move directly towards sphere)
+		//camera won't go below 0 for some reason ... or does strange things under unknown circumstances
+		//kills spidercam ...
 		Vector3 distance = transform.position - player.position; 
-		transform.position = player.position + distance.normalized * distanceFromSphere;
+		Vector3 heightDifference = Vector3.Project (distance, upVector);
+		float horizontalDifferenceLength = Mathf.Sqrt (distanceFromSphere * distanceFromSphere - heightDifference.magnitude * heightDifference.magnitude);
+		Vector3 horizontalDifference = transform.position - (player.position + heightDifference);
+		horizontalDifference.Normalize();
+		horizontalDifference *= horizontalDifferenceLength;
+		transform.position = player.position + horizontalDifference + heightDifference;
+		//check if sth is obstructing view
+		distance = transform.position - player.position;
+		Ray ray = new Ray (player.position, distance);
+		RaycastHit hitinfo = new RaycastHit();
+		if (Physics.Raycast (ray, out hitinfo, distance.magnitude)) {
+			transform.position = hitinfo.point;
+		}
+		//point towards sphere
 		transform.forward = -distance;
 	}
 
