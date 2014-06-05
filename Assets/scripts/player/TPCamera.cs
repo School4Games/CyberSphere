@@ -8,13 +8,19 @@ public class TPCamera : MonoBehaviour {
 	public float XSensitivity = 100;
 	public float YSensitivity = 100;
 
+	public float distanceFromSphere = 5;
+
 	//changes when spidershere activates
 	Vector3 upVector = Vector3.up;
 
-	//add more params for handling ... ask Tim
+	SphereController sphereController;
 
+	//add more params for handling ... ask Tim
+	
 	void follow () {
-		transform.position = player.position - transform.forward * 5;
+		Vector3 distance = transform.position - player.position; 
+		transform.position = player.position + distance.normalized * distanceFromSphere;
+		transform.forward = -distance;
 	}
 
 	void rotate () {
@@ -30,6 +36,7 @@ public class TPCamera : MonoBehaviour {
 	void Start () {
 		Screen.showCursor = false;
 		Screen.lockCursor = true;
+		sphereController = player.GetComponent ("SphereController") as SphereController;
 	}
 
 	void OnPreRender () {
@@ -37,11 +44,10 @@ public class TPCamera : MonoBehaviour {
 		follow ();
 	}
 
-	void checkUp () {
-		SphereController sphereController = player.GetComponent ("SphereController") as SphereController;
+	void pointUp () {
 		if (sphereController.spider && sphereController.adhesionForce != Vector3.zero) {
 			upVector = -sphereController.adhesionForce;
-			//if upside down
+			//if upside down -> turn around x first
 			if (Vector3.Angle(transform.up, upVector) > 90) {
 				float angle0 = Vector3.Angle(transform.up, upVector);
 				int p0 = clockwisePrefix (transform.right, transform.up, upVector);
@@ -86,6 +92,6 @@ public class TPCamera : MonoBehaviour {
 	void Update () {
 		//broken for some reason xD
 		//rotates the camera
-		checkUp ();
+		pointUp ();
 	}
 }
