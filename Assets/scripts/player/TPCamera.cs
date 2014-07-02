@@ -5,87 +5,73 @@ public class TPCamera : MonoBehaviour {
 
 	public Transform player;
 
-	public float XSensitivity = 100;
-	public float YSensitivity = 100;
+	public float XSensitivity = 10;
+	public float YSensitivity = 10;
+
+	public float distanceFromSphere = 5;
+
+	public float heightOffset;
+
+	public float turnSluggishness = 5;
 
 	//changes when spidershere activates
 	Vector3 upVector = Vector3.up;
 
-	//add more params for handling ... ask Tim
+	SphereController sphereController;
 
-	void follow () {
-		transform.position = player.position - transform.forward * 5;
-	}
-
-	void rotate () {
-		if (Input.GetAxis("Mouse X") != 0) {
-			transform.RotateAround (player.position, upVector, Input.GetAxis("Mouse X") * Time.deltaTime * XSensitivity);
-		}
-		if (Input.GetAxis("Mouse Y") != 0) {
-			transform.RotateAround (player.position, -transform.right, Input.GetAxis("Mouse Y") * Time.deltaTime * YSensitivity);
-		}
-	}
+	Quaternion rotation;
+	Vector3 relativePosition;
 
 	// Use this for initialization
 	void Start () {
+		relativePosition = (player.position - transform.position).normalized;
+		rotation = transform.rotation;
 		Screen.showCursor = false;
 		Screen.lockCursor = true;
+		sphereController = player.GetComponent ("SphereController") as SphereController;
 	}
-
-	void OnPreRender () {
+	
+	void OnPostRender () {
+		//distanceBySpeed ();
 		rotate ();
 		follow ();
+		pointUp ();
 	}
 
-	void checkUp () {
-		SphereController sphereController = player.GetComponent ("SphereController") as SphereController;
+	void distanceBySpeed () {
+		distanceFromSphere = 5 * (1 + player.rigidbody.velocity.magnitude/20);
+	}
+
+	void follow () {
+		transform.position = player.position + relativePosition * distanceFromSphere;
+	}
+
+	void rotate () {
+		//mouse look
+		if (Input.GetAxis("Mouse X") != 0) {
+			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Mouse X")) * -transform.right, Time.deltaTime * Mathf.Abs(Input.GetAxis("Mouse X")) * XSensitivity).normalized;
+		}
+		if (Input.GetAxis("Mouse Y") != 0) {
+			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Mouse Y")) * -upVector, Time.deltaTime * Mathf.Abs(Input.GetAxis("Mouse Y")) * YSensitivity).normalized;
+		}
+
+		//orbit
+		//should probably put in own parameter controling "sensitivity"
+		if (Input.GetAxis("Horizontal") != 0) {
+			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Horizontal")) * -transform.right, Time.deltaTime * Mathf.Abs(Input.GetAxis("Horizontal")) * XSensitivity).normalized;
+		}
+	}
+
+	void pointUp () {
 		if (sphereController.spider && sphereController.adhesionForce != Vector3.zero) {
 			upVector = -sphereController.adhesionForce;
-			//if upside down
-			if (Vector3.Angle(transform.up, upVector) > 90) {
-				float angle0 = Vector3.Angle(transform.up, upVector);
-				int p0 = clockwisePrefix (transform.right, transform.up, upVector);
-				transform.RotateAround(transform.position, p0 * -transform.right, Mathf.Sqrt(angle0/10));
-			}
-			else {
-				float angle = Vector3.Angle(Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
-				if (angle > 0 && upVector.normalized != transform.up && transform.forward != upVector.normalized) {
-					int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, upVector), Vector3.Cross(transform.forward, transform.up));
-					transform.RotateAround(transform.position, p * transform.forward, Mathf.Min(Mathf.Sqrt(angle/10), 2));
-				}
-			}
+
 		}
 		else if (!sphereController.spider && upVector.normalized != transform.up) {
 			upVector = Vector3.up;
-			//if upside down
-			if (Vector3.Angle(transform.up, upVector) > 90) {
-				float angle0 = Vector3.Angle(transform.up, upVector);
-				int p0 = clockwisePrefix (transform.right, transform.up, upVector);
-				transform.RotateAround(transform.position, p0 * -transform.right, Mathf.Sqrt(angle0/10));
-			}
-			else {
-				float angle = Vector3.Angle(Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
-				int p = clockwisePrefix (transform.forward, Vector3.Cross(transform.forward, Vector3.up), Vector3.Cross(transform.forward, transform.up));
-				transform.RotateAround(transform.position, p * transform.forward, Mathf.Sqrt(angle/10));
-			}
 		}
-	}
-
-	//returns 1 if clockwise, -1 if counterclockwise
-	//can you put stuff like this in some sort of library?
-	int clockwisePrefix (Vector3 axis, Vector3 direction, Vector3 targetDirection) {
-		if (Vector3.Angle(Vector3.Cross(targetDirection, direction), axis) < 90) {
-			return 1;
-		}
-		else {
-			return -1;
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//broken for some reason xD
-		//rotates the camera
-		checkUp ();
+		Vector3 forwardVector = player.position + transform.up * heightOffset - transform.position;
+		rotation.SetLookRotation (forwardVector, upVector);
+		transform.rotation = Quaternion.Lerp (transform.rotation, rotation, Time.deltaTime * turnSluggishness);
 	}
 }

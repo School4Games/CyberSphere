@@ -341,7 +341,7 @@ class PlaygroundParticles extends MonoBehaviour {
 		
 			playgroundParticles.worldObject = worldObject;
 				
-		} else Debug.Log("Could not find a mesh in "+meshTransform.name+".");
+		} //else Debug.Log("Could not find a mesh in "+meshTransform.name+".");
 		
 		return worldObject;
 	}
