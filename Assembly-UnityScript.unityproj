@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{B40DD74F-6B2B-9427-C9B6-85DC70CDAAD2}</ProjectGuid>
+	<ProjectGuid>{E2909301-13E4-DE2B-D4E1-37AD1AE7740A}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -51,14 +51,8 @@
      <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\PlatformInputController.js" />
      <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
      <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" />
-     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
-     <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{BB030B2F-10D9-E0DC-3DB6-93DE350DA77E}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{C4983DB0-4C2F-5D13-7B28-51E4ACBADAF0}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+     <None Include="Assets\Scripts\Cameras\Camera Guidelines.txt" />
+     <None Include="Assets\Prefabs\Player\Rolling Ball Guidelines.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

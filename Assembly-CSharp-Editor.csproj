@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{CBF97913-439E-EC37-1038-0EEAA211F4CE}</ProjectGuid>
+	<ProjectGuid>{17C49755-959D-5729-DD9B-3D68D3A7770D}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,22 +46,18 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\Cameras\Scripts\Editor\FreeLookCamInspector.cs" />
-     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
-     <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
+     <Compile Include="Assets\Scripts\Cameras\Scripts\Editor\FreeLookCamInspector.cs" />
+     <None Include="Assets\Scripts\Cameras\Camera Guidelines.txt" />
+     <None Include="Assets\Prefabs\Player\Rolling Ball Guidelines.txt" />
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{BB030B2F-10D9-E0DC-3DB6-93DE350DA77E}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{C4983DB0-4C2F-5D13-7B28-51E4ACBADAF0}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{71B92C7C-1412-230C-08C7-F2097C5673C1}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{C064556E-647B-7043-0665-00F9B6A0B4E8}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript.unityproj">
-      <Project>{B40DD74F-6B2B-9427-C9B6-85DC70CDAAD2}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
+      <Project>{E2909301-13E4-DE2B-D4E1-37AD1AE7740A}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

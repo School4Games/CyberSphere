@@ -21,24 +21,25 @@ public class Laser : MonoBehaviour {
 		RaycastHit hitinfo = new RaycastHit ();
 		Physics.Raycast(ray, out hitinfo);
 		linerenderer.SetPosition (0, transform.position);
-		if (hitinfo.collider != null) {
+		if (hitinfo.point != Vector3.zero) {
 			linerenderer.SetPosition (1, hitinfo.point);
 			sparks.position = hitinfo.point;
 			sparks.gameObject.SetActive(true);
-			//damage sphere
-			GameObject sphere = hitinfo.collider.gameObject;
-			if (sphere.GetComponent("SphereController")) {
-				SphereController sphereController = sphere.GetComponent("SphereController") as SphereController;
-				GameObject graphics = sphereController.graphics.gameObject;
-				Color newColor = graphics.renderer.material.color;
-				newColor.r += Time.deltaTime * 10;
-				graphics.renderer.material.color = newColor;
-			}
+			
 		}
 		else {
 			linerenderer.SetPosition (1, transform.position + transform.forward * 1000);
 			sparks.gameObject.SetActive(false);
 		}
+		//damage sphere
+		/*GameObject sphere = hitinfo.collider.gameObject;
+		if (sphere.GetComponent("SphereController")) {
+			SphereController sphereController = sphere.GetComponent("SphereController") as SphereController;
+			GameObject graphics = sphereController.graphics.gameObject;
+			Color newColor = graphics.renderer.material.color;
+			newColor.r += Time.deltaTime * 10;
+			graphics.renderer.material.color = newColor;
+		}*/
 	}
 	
 	// Update is called once per frame

@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{CBF97913-439E-EC37-1038-0EEAA211F4CE}</ProjectGuid>
+	<ProjectGuid>{17C49755-959D-5729-DD9B-3D68D3A7770D}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,24 +46,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\Cameras\Scripts\Editor\FreeLookCamInspector.cs" />
-     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
-     <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/dennis.dabergotz/Documents/GitHub/CyberSphere/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
+     <Compile Include="Assets\Scripts\Cameras\Scripts\Editor\FreeLookCamInspector.cs" />
+     <None Include="Assets\Scripts\Cameras\Camera Guidelines.txt" />
+     <None Include="Assets\Prefabs\Player\Rolling Ball Guidelines.txt" />
  <Reference Include="Assembly-UnityScript">
- <HintPath>C:/Users/dennis.dabergotz/Documents/GitHub/CyberSphere/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
+ <HintPath>Z:/Game Projekts/Cyber Sphere [Project]/CS_Levelbau_Prototyping/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{BB030B2F-10D9-E0DC-3DB6-93DE350DA77E}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp-vs.csproj">
-      <Project>{71B92C7C-1412-230C-08C7-F2097C5673C1}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
+      <Project>{C064556E-647B-7043-0665-00F9B6A0B4E8}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
