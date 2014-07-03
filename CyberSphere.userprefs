@@ -1,10 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\player\TPCamera.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\effects\TriShatter.cs">
     <Files>
-      <File FileName="Assets\scripts\player\TPCamera.cs" Line="75" Column="104" />
-      <File FileName="Assets\scripts\player\SphereController.cs" Line="92" Column="66" />
-      <File FileName="Assets\scripts\doNotTouch\Mathc.cs" Line="14" Column="50" />
+      <File FileName="Assets\scripts\player\TPCamera.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\player\SphereController.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\doNotTouch\Mathc.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\effects\TriShatter.cs" Line="43" Column="20" />
+      <File FileName="Z:\Campfire\Assets\scripts\VoxelTest.cs" Line="33" Column="24" />
+      <File FileName="..\..\..\Downloads\cgmadness-1.3-src.tar\cgmadness-1.3-src\cgmadness\ball\Explosion.cpp" Line="27" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
