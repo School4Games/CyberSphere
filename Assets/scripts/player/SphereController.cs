@@ -40,6 +40,9 @@ public class SphereController : MonoBehaviour {
 
 	public Transform currentCheckpoint;
 
+	TriShatter effects;
+	bool dead = false;
+
 	bool onGround = false;
 	int groundColliders = 0;
 
@@ -82,6 +85,7 @@ public class SphereController : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
+		effects = graphics.GetComponent("TriShatter") as TriShatter;
 		tumbleCountDown = tumbleTime;
 		rigidbody.useGravity = false;
 	}
@@ -109,18 +113,25 @@ public class SphereController : MonoBehaviour {
 		if (transform.position.y < 0) {
 			health = 0;
 		}
+		if (health <= 0) {
+			if (!dead) {
+				effects.playEffect("blackHole");
+			}
+			dead = true;
+			//press key to respawn
+			if (Input.anyKeyDown) {
+				transform.position = currentCheckpoint.position;
+				health = maxHealth;
+				dead = false;
+				effects.playEffect("combine");
+			}
+		}
 	}
 
 	void OnGUI () {
 		if (health <= 0) {
 			//show Game Over Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "Game Over \n Try again? \n (Press any key)");
-
-			//press key to respawn
-			if (Input.anyKeyDown) {
-				transform.position = currentCheckpoint.position;
-				health = maxHealth;
-			}
 		}
 	}
 

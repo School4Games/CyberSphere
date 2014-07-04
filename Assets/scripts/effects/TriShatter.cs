@@ -4,12 +4,14 @@ using System.Collections;
 public class TriShatter : MonoBehaviour {
 
 	Mesh mesh;
-
+	
 	Vector3[] vertices;
+	Vector3[] splitVertices;
 	Vector3[] newVertices;
 
 	int[] triangles;
 	int[] newTriangles;
+	int[] doubleTriangles;
 
 	Vector2[] uv;
 	Vector2[] newUV;
@@ -26,7 +28,11 @@ public class TriShatter : MonoBehaviour {
 		splitTriangles();
 		//test
 		makeDoubleSided ();
-		StartCoroutine("blackHole");
+	}
+
+	public void playEffect (string name) {
+		StopAllCoroutines ();
+		StartCoroutine (name);
 	}
 
 	void splitTriangles () {
@@ -35,6 +41,7 @@ public class TriShatter : MonoBehaviour {
 			newTriangles[i] = i;
 			newUV[i] = uv[triangles[i]];
 		}
+		splitVertices = newVertices;
 		mesh.Clear ();
 		mesh.vertices = newVertices;
 		mesh.triangles = newTriangles;
@@ -46,7 +53,7 @@ public class TriShatter : MonoBehaviour {
 	}
 
 	void makeDoubleSided () {
-		int[] doubleTriangles = new int[mesh.triangles.Length*2];
+		doubleTriangles = new int[mesh.triangles.Length*2];
 		for (int i=0; i<mesh.triangles.Length; i++) {
 			doubleTriangles[i] = mesh.triangles[i];
 			if ((i+1)%3 == 1) {
@@ -95,11 +102,14 @@ public class TriShatter : MonoBehaviour {
 	}
 
 	IEnumerator combine () {
+		mesh.vertices = splitVertices;
+		newTriangles = doubleTriangles;
 		int[] newNewTriangles = new int[newTriangles.Length];
 		mesh.triangles = newNewTriangles;
-		for (int i=0; i<newVertices.Length; i++) {
+		for (int i=0; i<newTriangles.Length; i++) {
 			newNewTriangles[i] = newTriangles[i];
 			mesh.triangles = newNewTriangles;
+			makeDoubleSided ();
 			if ((i+1) % 3 == 0) {
 				yield return new WaitForEndOfFrame ();
 			}
