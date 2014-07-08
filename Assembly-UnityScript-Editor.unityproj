@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{A52B4B1F-A1A6-7946-07E6-F203170133F7}</ProjectGuid>
+	<ProjectGuid>{266E11BE-06A4-066D-08FA-936B7780E805}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -53,6 +53,7 @@
      <Compile Include="Assets\middleware\Particle Playground\Scripts\Editor\PlaygroundParticleSystemInspector.js" />
      <Compile Include="Assets\middleware\Particle Playground\Scripts\Editor\PlaygroundParticleWindow.js" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\VertexLit Color.shader" />
+     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
      <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\Vertex Color.shader" />
  <Reference Include="UnityEditor.Graphs">
@@ -60,14 +61,8 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{2E02BB92-EB53-0CA2-2ED0-83F88E3DC4FF}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{52164FC9-5998-DBBE-AC8B-5438E6F58C65}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{F8F483EB-666F-5ABE-3477-BCD939E9D679}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript.unityproj">
-      <Project>{EE3D5356-EBF3-F78D-4CF5-99B0339F830B}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
+      <Project>{B40DD74F-6B2B-9427-C9B6-85DC70CDAAD2}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

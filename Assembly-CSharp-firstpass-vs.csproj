@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{2E02BB92-EB53-0CA2-2ED0-83F88E3DC4FF}</ProjectGuid>
+	<ProjectGuid>{BB030B2F-10D9-E0DC-3DB6-93DE350DA77E}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\VertexLit Color.shader" />
+     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
      <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\Vertex Color.shader" />
   </ItemGroup>

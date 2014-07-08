@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{EE3D5356-EBF3-F78D-4CF5-99B0339F830B}</ProjectGuid>
+	<ProjectGuid>{B40DD74F-6B2B-9427-C9B6-85DC70CDAAD2}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,6 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" />
+     <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" />
+     <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\PlatformInputController.js" />
+     <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
+     <Compile Include="Assets\Legacy\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" />
      <Compile Include="Assets\middleware\Particle Playground\Examples\Example Scripts\External\Procedural\KeyboardOrbit.js" />
      <Compile Include="Assets\middleware\Particle Playground\Examples\Example Scripts\External\Procedural\PaintVertices.js" />
      <Compile Include="Assets\middleware\Particle Playground\Examples\Example Scripts\PlaygroundExampleFeatures.js" />
@@ -57,21 +62,10 @@
      <Compile Include="Assets\middleware\Particle Playground\Scripts\PlaygroundParticles.js" />
      <Compile Include="Assets\middleware\Particle Playground\Scripts\Presets\PlaygroundBrushPreset.js" />
      <Compile Include="Assets\middleware\Particle Playground\Scripts\Presets\PlaygroundPresetLaser.js" />
-     <Compile Include="Assets\middleware\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" />
-     <Compile Include="Assets\middleware\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" />
-     <Compile Include="Assets\middleware\Standard Assets\Character Controllers\Sources\Scripts\PlatformInputController.js" />
-     <Compile Include="Assets\middleware\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
-     <Compile Include="Assets\middleware\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\VertexLit Color.shader" />
+     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
      <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\Vertex Color.shader" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>Z:/Game Projekts/Cyber Sphere [Project]/CyberSphere-Dennis/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{2E02BB92-EB53-0CA2-2ED0-83F88E3DC4FF}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

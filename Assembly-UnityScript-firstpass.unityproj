@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{52164FC9-5998-DBBE-AC8B-5438E6F58C65}</ProjectGuid>
+	<ProjectGuid>{C4983DB0-4C2F-5D13-7B28-51E4ACBADAF0}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -52,6 +52,7 @@
      <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonCamera.js" />
      <Compile Include="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\VertexLit Color.shader" />
+     <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
      <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\Vertex Color.shader" />
   </ItemGroup>
