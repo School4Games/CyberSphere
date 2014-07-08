@@ -7,6 +7,7 @@ public class Checkpoint : MonoBehaviour {
 		if (other.gameObject.tag == "Player") {
 			SphereController sphereController = other.GetComponent("SphereController") as SphereController;
 			sphereController.currentCheckpoint = transform;
+			renderer.enabled = false;
 		}
 	}
 }

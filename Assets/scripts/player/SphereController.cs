@@ -115,7 +115,7 @@ public class SphereController : MonoBehaviour {
 		}
 		if (health <= 0) {
 			if (!dead) {
-				effects.playEffect("blackHole");
+				effects.playEffect("dissolve");
 			}
 			dead = true;
 			//press key to respawn

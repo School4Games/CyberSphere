@@ -16,6 +16,8 @@ public class TriShatter : MonoBehaviour {
 	Vector2[] uv;
 	Vector2[] newUV;
 
+	int speed = 7;
+
 	// Use this for initialization
 	void Start () {
 		mesh = GetComponent<MeshFilter>().mesh;
@@ -25,13 +27,18 @@ public class TriShatter : MonoBehaviour {
 		newVertices = new Vector3[triangles.Length];
 		newTriangles = new int[triangles.Length];
 		newUV = new Vector2[triangles.Length];
-		splitTriangles();
-		//test
+		splitTriangles ();
 		makeDoubleSided ();
+		restore ();
 	}
 
+	//strange things happen when you assign mesh verts from array (array changes with mesh)
 	public void playEffect (string name) {
 		StopAllCoroutines ();
+		restore ();
+		newVertices = splitVertices;
+		mesh.vertices = newVertices;
+		mesh.triangles = doubleTriangles;
 		StartCoroutine (name);
 	}
 
@@ -70,6 +77,16 @@ public class TriShatter : MonoBehaviour {
 		mesh.RecalculateNormals ();
 	}
 
+	void restore () {
+		mesh.Clear ();
+		mesh.vertices = vertices;
+		mesh.triangles = triangles;
+		mesh.uv = uv;
+		mesh.uv1 = uv;
+		mesh.uv2 = uv;
+		mesh.RecalculateNormals();
+	}
+
 	IEnumerator shatter () {
 		for (float t=0; t<5; t+=Time.deltaTime) {
 			for (int i=0; i<30; i++) {
@@ -83,9 +100,9 @@ public class TriShatter : MonoBehaviour {
 
 	IEnumerator blackHole () {
 		for (int i=0; i<newVertices.Length; i++) {
-			newVertices[i] = Vector3.zero;
-			mesh.vertices = newVertices;
-			if ((i+1) % 3 == 0) {
+			//newVertices[i] = Vector3.zero;
+			mesh.vertices[i] = Vector3.zero;
+			if ((i+1) % (3*speed) == 0) {
 				yield return new WaitForEndOfFrame ();
 			}
 		}
@@ -95,24 +112,37 @@ public class TriShatter : MonoBehaviour {
 		for (int i=0; i<newVertices.Length; i++) {
 			newTriangles[i] = 0;
 			mesh.triangles = newTriangles;
-			if ((i+1) % 3 == 0) {
+			if ((i+1) % (3*speed) == 0) {
 				yield return new WaitForEndOfFrame ();
 			}
 		}
 	}
 
 	IEnumerator combine () {
-		mesh.vertices = splitVertices;
-		newTriangles = doubleTriangles;
-		int[] newNewTriangles = new int[newTriangles.Length];
-		mesh.triangles = newNewTriangles;
-		for (int i=0; i<newTriangles.Length; i++) {
-			newNewTriangles[i] = newTriangles[i];
+		mesh.Clear ();
+		newVertices = splitVertices;
+		mesh.vertices = newVertices;
+		//newTriangles = doubleTriangles;
+		int[] newNewTriangles = new int[doubleTriangles.Length];
+		mesh.triangles = doubleTriangles;
+		for (int i=0; i<doubleTriangles.Length/2; i++) {
+			newNewTriangles[i] = doubleTriangles[i];
+			//other side of triangle
+			if ((i+1)%3 == 1) {
+				newNewTriangles[i + newNewTriangles.Length/2 + 2] = newTriangles[i];
+			}
+			else if ((i+1)%3 == 2) {
+				newNewTriangles[i + newNewTriangles.Length/2] = newTriangles[i];
+			}
+			else if ((i+1)%3 == 0) {
+				newNewTriangles[i + newNewTriangles.Length/2 - 2] = newTriangles[i];
+			}
 			mesh.triangles = newNewTriangles;
-			makeDoubleSided ();
-			if ((i+1) % 3 == 0) {
+			if ((i+1) % (3*speed) == 0) {
 				yield return new WaitForEndOfFrame ();
 			}
 		}
+		restore ();
+		yield return new WaitForEndOfFrame ();
 	}
 }
