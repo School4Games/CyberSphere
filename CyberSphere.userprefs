@@ -1,9 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\teaching_stuff\Assets\scripts\enemyMovement.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\objects\circleRotation.js">
     <Files>
-      <File FileName="..\..\teaching_stuff\Assets\scripts\playerMovement.cs" Line="29" Column="42" />
-      <File FileName="..\..\teaching_stuff\Assets\scripts\enemyMovement.cs" Line="6" Column="26" />
+      <File FileName="Assets\scripts\objects\circleRotation.js" Line="5" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

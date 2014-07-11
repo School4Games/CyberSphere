@@ -62,6 +62,7 @@
      <Compile Include="Assets\middleware\Particle Playground\Scripts\PlaygroundParticles.js" />
      <Compile Include="Assets\middleware\Particle Playground\Scripts\Presets\PlaygroundBrushPreset.js" />
      <Compile Include="Assets\middleware\Particle Playground\Scripts\Presets\PlaygroundPresetLaser.js" />
+     <Compile Include="Assets\scripts\objects\circleRotation.js" />
      <None Include="Assets\middleware\Particle Playground\Graphics\Shaders\VertexLit Color.shader" />
      <None Include="Assets\scripts\Cameras\Camera Guidelines.txt" />
      <None Include="Assets\prefabs\Player\Rolling Ball Guidelines.txt" />
