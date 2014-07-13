@@ -173,6 +173,7 @@
      <Compile Include="Assets\scripts\doNotTouch\MovingPlatformsEditorStuff.cs" />
      <Compile Include="Assets\scripts\effects\TriShatter.cs" />
      <Compile Include="Assets\scripts\hazards\Laser.cs" />
+     <Compile Include="Assets\scripts\info\Booster.cs" />
      <Compile Include="Assets\scripts\info\Checkpoint.cs" />
      <Compile Include="Assets\scripts\info\Goal.cs" />
      <Compile Include="Assets\scripts\objects\MovingPlatform.cs" />

@@ -20,7 +20,7 @@ public class TriShatter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		mesh = GetComponent<MeshFilter>().mesh;
+		/*mesh = GetComponent<MeshFilter>().mesh;
 		vertices = mesh.vertices;
 		triangles = mesh.triangles;
 		uv = mesh.uv;
@@ -29,17 +29,17 @@ public class TriShatter : MonoBehaviour {
 		newUV = new Vector2[triangles.Length];
 		splitTriangles ();
 		makeDoubleSided ();
-		restore ();
+		restore ();*/
 	}
 
 	//strange things happen when you assign mesh verts from array (array changes with mesh)
 	public void playEffect (string name) {
-		StopAllCoroutines ();
+		/*StopAllCoroutines ();
 		restore ();
 		newVertices = splitVertices;
 		mesh.vertices = newVertices;
 		mesh.triangles = doubleTriangles;
-		StartCoroutine (name);
+		StartCoroutine (name);*/
 	}
 
 	void splitTriangles () {

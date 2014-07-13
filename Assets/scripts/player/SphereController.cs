@@ -8,6 +8,7 @@ public class SphereController : MonoBehaviour {
 
 	//[um/s] (unitymeters per second)
 	public float maxSpeed = 10;
+	float initialMaxSpeed;
 
 	//[um/s]
 	public float maxFallSpeed = 20;
@@ -39,6 +40,10 @@ public class SphereController : MonoBehaviour {
 	public float health = 100;
 
 	public Transform currentCheckpoint;
+
+	public float boostMultiplier = 1.5f;
+	//[s]
+	public float boostDuration = 2;
 
 	TriShatter effects;
 	bool dead = false;
@@ -85,6 +90,7 @@ public class SphereController : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
+		initialMaxSpeed = maxSpeed;
 		effects = graphics.GetComponent("TriShatter") as TriShatter;
 		tumbleCountDown = tumbleTime;
 		rigidbody.useGravity = false;
@@ -133,6 +139,16 @@ public class SphereController : MonoBehaviour {
 			//show Game Over Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "Game Over \n Try again? \n (Press any key)");
 		}
+	}
+
+	public void boost () {
+		StartCoroutine ("coBoost");
+	}
+
+	IEnumerator coBoost () {
+		maxSpeed = initialMaxSpeed * boostMultiplier;
+		yield return new WaitForSeconds (boostDuration);
+		maxSpeed = initialMaxSpeed;
 	}
 
 	void tint () {
