@@ -159,7 +159,7 @@ public class SphereController : MonoBehaviour {
 			upVector = -adhesionForce;
 		}
 		Vector3 forwardVector = Vector3.Cross(Camera.main.transform.right, upVector);
-		Vector3 rightVector = Vector3.Cross(Camera.main.transform.forward, upVector);
+//		Vector3 rightVector = Vector3.Cross(Camera.main.transform.forward, upVector);
 
 		if (Vector3.Angle(rigidbody.velocity, forwardVector) < 45) {
 			float fov = (1 + Mathf.Sqrt(Mathf.Max(rigidbody.velocity.magnitude - maxSpeed, 0) / maxSpeed)/2) * 60;
