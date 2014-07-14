@@ -186,6 +186,9 @@ public class SphereController : MonoBehaviour {
 		else {
 			spider = false;
 		}
+		if (Input.GetKeyDown (KeyCode.R)) { 
+			Application.LoadLevel(0);
+				}
 		//cool
 		/*Color newColor = graphics.renderer.material.color;
 		newColor.r -= Time.deltaTime * 2;

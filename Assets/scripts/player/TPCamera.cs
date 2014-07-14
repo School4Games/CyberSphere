@@ -26,8 +26,8 @@ public class TPCamera : MonoBehaviour {
 	void Start () {
 		relativePosition = (player.position - transform.position).normalized;
 		rotation = transform.rotation;
-		Screen.showCursor = false;
-		Screen.lockCursor = true;
+		//Screen.showCursor = true;
+		//Screen.lockCursor = true;
 		sphereController = player.GetComponent ("SphereController") as SphereController;
 	}
 	
