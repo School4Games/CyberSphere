@@ -10,8 +10,20 @@ public class TestOptionen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		CheckFullscreen ();
 	}
+
+	bool isFullscreen;
+
+	void CheckFullscreen () {
+		if (Screen.fullScreen == true) {
+			isFullscreen = true;
+				}
+		if (Screen.fullScreen == false) {
+			isFullscreen = false;
+				}
+		}
+
 	public float hSliderValue = 60.0F;
 	int TFrameInt = 60;
 
@@ -21,6 +33,8 @@ public class TestOptionen : MonoBehaviour {
 		int TFrameInt = Mathf.RoundToInt (hSliderValue);
 		var TFrame = TFrameInt.ToString ();
 		GUI.Label (new Rect (130, 300, 100, 20), TFrame);
+		var abc = isFullscreen.ToString();
+		GUI.Label (new Rect (170, 120, 100, 50), ("Fullscreen: " + abc));
 
 
 
@@ -46,6 +60,9 @@ public class TestOptionen : MonoBehaviour {
 		if (GUI.Button (new Rect (280, 10, 100, 50), "VSync Off")) {
 			VSync0 ();
 		}
+		if (GUI.Button (new Rect (170, 70, 100, 50), "Fullscreen")) {
+			FScreen();
+				}
 
 	}
 
@@ -65,11 +82,14 @@ public class TestOptionen : MonoBehaviour {
 		}
 
 	void VSync1 () {
-		QualitySettings.vSyncCount = 1;
+		QualitySettings.vSyncCount = 2;
 	}
 
 	void VSync0 () {
 		QualitySettings.vSyncCount = 0;
+		}
+	void FScreen() {
+		Screen.fullScreen = !Screen.fullScreen;
 		}
 
 
