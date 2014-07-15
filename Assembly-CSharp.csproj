@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\scripts\debug\FPSCounter.cs" />
      <Compile Include="Assets\scripts\debug\PauseMenu.cs" />
+     <Compile Include="Assets\scripts\debug\RotateAroundTarget.cs" />
      <Compile Include="Assets\scripts\debug\TestOptionen.cs" />
      <Compile Include="Assets\scripts\doNotTouch\Mathc.cs" />
      <Compile Include="Assets\scripts\doNotTouch\MovingPlatformsEditorStuff.cs" />
