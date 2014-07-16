@@ -10,7 +10,7 @@ public class Menu_v2 : MonoBehaviour
 	
 	
 	private string clicked = "", ZeilenBeiTeam = "Team \n "; // \n not working, keep Zeile 1 (Element 0) empty to create space between head and content.
-	private Rect WindowRect = new Rect((Screen.width / 2) - 100, Screen.height / 2, 200, 200); // Hauptmenü Fenster wird erstellt
+	private Rect WindowRect = new Rect((Screen.width / 8f) - 100, Screen.height / 20f, 200, 200); // Hauptmenü Fenster wird erstellt
 	private float volume = 1.0f; // Standard Lautstärke
 	
 	private void Start()
