@@ -46,9 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\debug\CopyPasta.cs" />
      <Compile Include="Assets\scripts\debug\FPSCounter.cs" />
-     <Compile Include="Assets\scripts\debug\Hauptmenue.cs" />
+     <Compile Include="Assets\scripts\debug\Menu_v1.cs" />
+     <Compile Include="Assets\scripts\debug\Menu_v2.cs" />
      <Compile Include="Assets\scripts\debug\RotateAroundTarget.cs" />
      <Compile Include="Assets\scripts\debug\TestOptionen.cs" />
      <Compile Include="Assets\scripts\doNotTouch\Mathc.cs" />
