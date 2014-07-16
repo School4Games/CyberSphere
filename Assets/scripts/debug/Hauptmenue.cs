@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PauseMenu : MonoBehaviour {
+public class Hauptmenue : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour {
 	bool guiEnable = false;
 	bool videoEnable = false;
 	bool soundEnable = false;
+	bool levelEnable = false;
 	
 	// Update is called once per frame
 	void Update () {
@@ -20,14 +21,14 @@ public class PauseMenu : MonoBehaviour {
 	}
 	
 	void EscapeToMenu () {
-//		if (Input.GetKeyDown (KeyCode.Escape)) {
-//			if (guiEnable == false){
-//				guiEnable = true;
-//			}
-//			else {
-//				guiEnable = false;
-//			}
-//		}
+		//		if (Input.GetKeyDown (KeyCode.Escape)) {
+		//			if (guiEnable == false){
+		//				guiEnable = true;
+		//			}
+		//			else {
+		//				guiEnable = false;
+		//			}
+		//		}
 	}
 	
 	void CheckFullscreen () {
@@ -43,26 +44,42 @@ public class PauseMenu : MonoBehaviour {
 		if (guiEnable == false) {
 			videoEnable = false;
 			soundEnable = false;
+			levelEnable = false;
 		}
 		
 		if (guiEnable == true) {
 			if (GUI.Button (new Rect (10, 70, 100, 50), "Video")) { 
 				videoEnable = true;
+				levelEnable = false;
 			}
 			if (videoEnable == true) {
 				soundEnable = false;
+				levelEnable = false;
 			}
 			if (GUI.Button (new Rect (10, 130, 100, 50), "Sound")) {
 				soundEnable = true;
 			}
 			if (soundEnable == true) {
 				videoEnable = false;
+				levelEnable = false;
 			}
-			if (GUI.Button (new Rect (10, 10, 100, 50), "Return")) {
-				guiEnable = false;
+			if (GUI.Button (new Rect (10, 10, 100, 50), "Level")) {
+				levelEnable = true;
 			}
-			if (GUI.Button (new Rect (10, 190, 100, 50), "LEVEL 1")) {
+			if (levelEnable == true) {
+				soundEnable = false;
+				videoEnable = false;
+			}
+		}
+		if (levelEnable == true) {
+			if (GUI.Button (new Rect (120, 10, 100, 50), "Level 1")) {
 				Application.LoadLevel(1);
+			}
+			if (GUI.Button (new Rect (120, 70, 100, 50), "Level 2")) {
+				Application.LoadLevel(2);
+			}
+			if (GUI.Button (new Rect (120, 130, 100, 50), "Level 3")) {
+				Application.LoadLevel(3);
 			}
 		}
 		
