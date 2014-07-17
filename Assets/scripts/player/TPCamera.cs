@@ -24,7 +24,7 @@ public class TPCamera : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		relativePosition = (player.position - transform.position).normalized;
+		relativePosition = (transform.position - player.position).normalized;
 		rotation = transform.rotation;
 		//Screen.showCursor = true;
 		//Screen.lockCursor = true;
