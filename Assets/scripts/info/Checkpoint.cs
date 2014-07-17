@@ -3,20 +3,11 @@ using System.Collections;
 
 public class Checkpoint : MonoBehaviour {
 
-	//for ms2
-	public Transform player;
-	
-	public KeyCode button;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKey(button)) {
-			player.position = transform.position;
+	void OnTriggerEnter (Collider other) {
+		if (other.gameObject.tag == "Player") {
+			SphereController sphereController = other.GetComponent("SphereController") as SphereController;
+			sphereController.currentCheckpoint = transform;
+			renderer.enabled = false;
 		}
 	}
 }

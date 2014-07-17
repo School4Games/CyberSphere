@@ -8,6 +8,7 @@ public class SphereController : MonoBehaviour {
 
 	//[um/s] (unitymeters per second)
 	public float maxSpeed = 10;
+	float initialMaxSpeed;
 
 	//[um/s]
 	public float maxFallSpeed = 20;
@@ -34,6 +35,18 @@ public class SphereController : MonoBehaviour {
 
 	//not used yet
 	public float maxSlopeAngle = 45;
+
+	public float maxHealth = 100;
+	public float health = 100;
+
+	public Transform currentCheckpoint;
+
+	public float boostMultiplier = 1.5f;
+	//[s]
+	public float boostDuration = 2;
+
+	TriShatter effects;
+	bool dead = false;
 
 	bool onGround = false;
 	int groundColliders = 0;
@@ -77,8 +90,72 @@ public class SphereController : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
+		initialMaxSpeed = maxSpeed;
+		effects = graphics.GetComponent("TriShatter") as TriShatter;
 		tumbleCountDown = tumbleTime;
 		rigidbody.useGravity = false;
+	}
+
+	// Update is called once per frame
+	void Update () {
+		move ();
+		spinGraphics ();
+		tint ();
+		//adjustFOV ();
+		//turn off gravity when hanging on wall
+		if (spider && onGround) {
+			//make "stickier" somehow
+			rigidbody.AddForce(adhesionForce);
+		} 
+		else {
+			rigidbody.AddForce(gravity*gravityMultiplier);
+		}
+		if (Input.GetButton("Fire2")) {
+			spider = true;
+		}
+		else {
+			spider = false;
+		}
+		if (transform.position.y < 0) {
+			health = 0;
+		}
+		if (health <= 0) {
+			if (!dead) {
+				effects.playEffect("dissolve");
+			}
+			dead = true;
+			//press key to respawn
+			if (Input.anyKeyDown) {
+				transform.position = currentCheckpoint.position;
+				health = maxHealth;
+				dead = false;
+				effects.playEffect("combine");
+			}
+		}
+	}
+
+	void OnGUI () {
+		if (health <= 0) {
+			//show Game Over Message
+			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "Game Over \n Try again? \n (Press any key)");
+		}
+	}
+
+	public void boost () {
+		StartCoroutine ("coBoost");
+	}
+
+	IEnumerator coBoost () {
+		maxSpeed = initialMaxSpeed * boostMultiplier;
+		yield return new WaitForSeconds (boostDuration);
+		maxSpeed = initialMaxSpeed;
+	}
+
+	void tint () {
+		Color newColor = graphics.renderer.material.color;
+		newColor.g = health/maxHealth;
+		newColor.b = health/maxHealth;
+		graphics.renderer.material.color = newColor;
 	}
 
 	void move () {
@@ -165,30 +242,5 @@ public class SphereController : MonoBehaviour {
 			float fov = (1 + Mathf.Sqrt(Mathf.Max(rigidbody.velocity.magnitude - maxSpeed, 0) / maxSpeed)/2) * 60;
 			Camera.main.fieldOfView = fov;
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		move ();
-		spinGraphics ();
-		//adjustFOV ();
-		//turn off gravity when hanging on wall
-		if (spider && onGround) {
-			//make "stickier" somehow
-			rigidbody.AddForce(adhesionForce);
-		} 
-		else {
-			rigidbody.AddForce(gravity*gravityMultiplier);
-		}
-		if (Input.GetButton("Fire2")) {
-			spider = true;
-		}
-		else {
-			spider = false;
-		}
-		//cool
-		/*Color newColor = graphics.renderer.material.color;
-		newColor.r -= Time.deltaTime * 2;
-		graphics.renderer.material.color = newColor;*/
 	}
 }

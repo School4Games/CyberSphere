@@ -24,7 +24,7 @@ public class TPCamera : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		relativePosition = (player.position - transform.position).normalized;
+		relativePosition = (transform.position - player.position).normalized;
 		rotation = transform.rotation;
 		Screen.showCursor = false;
 		Screen.lockCursor = true;
@@ -36,6 +36,15 @@ public class TPCamera : MonoBehaviour {
 		rotate ();
 		follow ();
 		pointUp ();
+		checkCollision ();
+	}
+
+	void checkCollision () {
+		Ray ray = new Ray(player.position, relativePosition);
+		RaycastHit hitinfo;
+		if (Physics.Raycast(ray, out hitinfo, Vector3.Distance(player.position, transform.position))) {
+			transform.position = hitinfo.point;
+		}
 	}
 
 	void distanceBySpeed () {
