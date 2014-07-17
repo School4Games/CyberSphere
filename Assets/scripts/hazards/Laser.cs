@@ -24,12 +24,12 @@ public class Laser : MonoBehaviour {
 		if (hitinfo.point != Vector3.zero) {
 			linerenderer.SetPosition (1, hitinfo.point);
 			sparks.position = hitinfo.point;
-			sparks.gameObject.SetActive(true);
+			//sparks.gameObject.SetActive(true);
 			
 		}
 		else {
 			linerenderer.SetPosition (1, transform.position + transform.forward * 1000);
-			sparks.gameObject.SetActive(false);
+			//sparks.gameObject.SetActive(false);
 		}
 		//damage sphere
 		/*GameObject sphere = hitinfo.collider.gameObject;
