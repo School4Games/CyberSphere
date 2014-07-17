@@ -79,7 +79,9 @@ public class Menu_v2 : MonoBehaviour
 		if (GUILayout.Button("Play")) // Play Button
 		{
 			// Play Game wird angeklickt
-			Application.LoadLevel(PlayLevel); // Level aus dem String "PlayLevel" wird geladen (0 - 10000)
+			int LoadLevelint;
+			int.TryParse (PlayLevel, out LoadLevelint); 
+			Application.LoadLevel(LoadLevelint); // Level aus dem String "PlayLevel" wird geladen (0 - 10000)
 		}
 		if (GUILayout.Button("Options"))
 		{
