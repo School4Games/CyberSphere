@@ -1,4 +1,0 @@
-CyberSphere
-===========
-
-Epic.
