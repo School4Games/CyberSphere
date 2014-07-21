@@ -47,7 +47,7 @@ public class Trail : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//when segmentWidth is reached, create new segment
-		if (Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-1]) >= segmentWidth) {
+		if (Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-2]) >= segmentWidth) {
 			Debug.Log(Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-2]));
 			createSegment ();
 		}
@@ -65,7 +65,7 @@ public class Trail : MonoBehaviour {
 		if (vertices.Count >= 2048) {
 			vertices.RemoveRange(0, 2);
 			uv.RemoveRange(0, 2);
-			triangles.RemoveRange(0, 6);
+			triangles.RemoveRange(triangles.Count-7, 6);
 		}
 		vertices.Add((parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
 		vert1 = vertices.Count-1;
