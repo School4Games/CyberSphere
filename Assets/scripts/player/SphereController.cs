@@ -6,6 +6,8 @@ public class SphereController : MonoBehaviour {
 	public bool spider = true;
 	public Vector3 adhesionForce = Vector3.down;
 
+	public bool win = false;
+
 	//[um/s] (unitymeters per second)
 	public float maxSpeed = 10;
 	float initialMaxSpeed;
@@ -135,6 +137,10 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void OnGUI () {
+		if (win) {
+			//show Win Message
+			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "You Win \n Congratulations :D");
+		}
 		if (health <= 0) {
 			//show Game Over Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "Game Over \n Try again? \n (Press any key)");
