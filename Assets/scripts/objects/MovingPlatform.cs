@@ -7,11 +7,14 @@ public class Waypoint {
 	public Vector3 rotation = Vector3.zero;
 }
 
+[RequireComponent(typeof (LineRenderer))]
 [RequireComponent(typeof (MovingPlatformsEditorStuff))]
 public class MovingPlatform : MonoBehaviour {
 	
 	public enum modes {pingPong, loop};
 	public modes mode;
+
+	LineRenderer linerenderer;
 
 	//which way does it go through the waypoints
 	bool ping = true;
@@ -28,6 +31,18 @@ public class MovingPlatform : MonoBehaviour {
 	int target = 1;
 	//last waypoint, needed for waiting at said waypoint
 	int lasttarget = 0;
+
+	// Use this for initialization
+	void Start () {
+		linerenderer = GetComponent ("LineRenderer") as LineRenderer;
+		setWaypoints ();
+		countdown = waitForSeconds[lasttarget];
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		followWaypoints ();
+	}
 	
 	void setWaypoints () {
 		//count waypoints
@@ -41,6 +56,11 @@ public class MovingPlatform : MonoBehaviour {
 			}
 		}
 		waypoints = new Waypoint[wpCount+1];
+		if (mode == modes.loop) {
+			linerenderer.SetVertexCount(wpCount+2);
+			linerenderer.SetPosition(wpCount+1, transform.position);
+		}
+		else linerenderer.SetVertexCount(wpCount+1);
 		for (int i = 0; i < waypoints.Length; i++) {
 			waypoints[i] = new Waypoint();
 		}
@@ -48,6 +68,7 @@ public class MovingPlatform : MonoBehaviour {
 		//fill with position and rotation of waypoints
 		waypoints[0].position = transform.position;
 		waypoints[0].rotation = transform.eulerAngles;
+		linerenderer.SetPosition(0, transform.position);
 		//set positions and rotations of children as waypoints
 		int index = 0;
 		for (int i = 1; i < waypoints.Length; i++) {
@@ -64,6 +85,7 @@ public class MovingPlatform : MonoBehaviour {
 			if (isWayPoint) {
 				waypoints[i].position = transform.GetChild(index).position;
 				waypoints[i].rotation = transform.GetChild(index).eulerAngles;
+				linerenderer.SetPosition(i, transform.GetChild(index).position);
 				Destroy(transform.GetChild(index).gameObject);
 				index++;
 			}
@@ -133,16 +155,5 @@ public class MovingPlatform : MonoBehaviour {
 			direction = waypoints[target].position - transform.position;
 			transform.position += direction.normalized * Time.deltaTime * outstandingMovement;
 		}
-	}
-	
-	// Use this for initialization
-	void Start () {
-		setWaypoints ();
-		countdown = waitForSeconds[lasttarget];
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		followWaypoints ();
 	}
 }
