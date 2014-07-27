@@ -11,6 +11,8 @@ public class Trail : MonoBehaviour {
 
 	Transform parent;
 
+	public bool isActive = false;
+
 	int vert1;
 	int vert2;
 
@@ -28,7 +30,6 @@ public class Trail : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		parent = transform.parent;
-		transform.parent = null;
 		mesh = GetComponent<MeshFilter>().mesh;
 		mesh.MarkDynamic();
 		mesh.Clear();
@@ -43,16 +44,40 @@ public class Trail : MonoBehaviour {
 		//test
 		createSegment ();
 	}
+
+	public void setActive (bool active) {
+		if (active == true) {
+			if (isActive) {
+				return;
+			}
+			newTrail ();
+			transform.parent = null;
+			isActive = true;
+		}
+		else {
+			isActive = false;
+		}
+	}
+
+	void newTrail () {
+		vertices.Add((parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
+		vertices.Add((parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
+		uv.Add(new Vector2(0, 1));
+		uv.Add(new Vector2(0, 0));
+		//test
+		createSegment ();
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		//when segmentWidth is reached, create new segment
-		if (Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-2]) >= segmentWidth) {
-			Debug.Log(Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-2]));
-			createSegment ();
+		if (isActive) {
+			//when segmentWidth is reached, create new segment
+			if (Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-2]) >= segmentWidth) {
+				createSegment ();
+			}
+			//else pull segment
+			else pull ();
 		}
-		//else pull segment
-		else pull ();
 	}
 
 	void pull () {

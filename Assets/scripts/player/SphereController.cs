@@ -30,6 +30,7 @@ public class SphereController : MonoBehaviour {
 	float gravityMultiplier = 1;
 
 	public Transform graphics;
+	public Trail trail;
 	//time until sphere aligns with movement direction
 	//[s]
 	public float tumbleTime = 2;
@@ -110,7 +111,7 @@ public class SphereController : MonoBehaviour {
 			rigidbody.AddForce(adhesionForce);
 		} 
 		else {
-			rigidbody.AddForce(gravity*gravityMultiplier);
+			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale);
 		}
 		if (Input.GetButton("Fire2")) {
 			spider = true;
@@ -209,6 +210,7 @@ public class SphereController : MonoBehaviour {
 		if (rigidbody.velocity.magnitude >= maxSpeed * 0.9f) {
 			tumbleCountDown -= Time.deltaTime;
 			if (tumbleCountDown <= 0) {
+				trail.setActive(true);
 				//align with movement direction
 				float straightAngle = Vector3.Angle(graphics.forward, Vector3.Cross(-adhesionForce, rigidbody.velocity));
 				straightAngle = Mathf.Sqrt (straightAngle)/2;
@@ -218,6 +220,7 @@ public class SphereController : MonoBehaviour {
 			}
 		}
 		else {
+			trail.setActive(false);
 			tumbleCountDown = tumbleTime;
 		}
 		float angle = 360 * ((rigidbody.velocity.magnitude * Time.deltaTime)/(2*Mathf.PI));

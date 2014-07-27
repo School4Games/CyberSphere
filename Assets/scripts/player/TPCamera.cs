@@ -26,8 +26,8 @@ public class TPCamera : MonoBehaviour {
 	void Start () {
 		relativePosition = (transform.position - player.position).normalized;
 		rotation = transform.rotation;
-		Screen.showCursor = false;
-		Screen.lockCursor = true;
+		/*Screen.showCursor = false;
+		Screen.lockCursor = true;*/
 		sphereController = player.GetComponent ("SphereController") as SphereController;
 	}
 	
@@ -80,6 +80,11 @@ public class TPCamera : MonoBehaviour {
 			upVector = Vector3.up;
 		}
 		Vector3 forwardVector = player.position + transform.up * heightOffset - transform.position;
+		//upside down
+		/*if (Vector3.Angle(transform.up, upVector) > 90) {
+			forwardVector = Vector3.Cross(Vector3.Cross(forwardVector, upVector), -forwardVector);
+		}
+		upVector = -Vector3.Cross(Vector3.Cross(forwardVector, upVector), -forwardVector);*/
 		rotation.SetLookRotation (forwardVector, upVector);
 		transform.rotation = Quaternion.Lerp (transform.rotation, rotation, Time.deltaTime * turnSluggishness);
 	}
