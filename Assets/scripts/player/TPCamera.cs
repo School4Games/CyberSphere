@@ -82,6 +82,7 @@ public class TPCamera : MonoBehaviour {
 		Vector3 forwardVector = player.position + transform.up * heightOffset - transform.position;
 		//upside down
 		/*if (Vector3.Angle(transform.up, upVector) > 90) {
+			Debug.Log ("örghs");
 			forwardVector = Vector3.Cross(Vector3.Cross(forwardVector, upVector), -forwardVector);
 		}
 		upVector = -Vector3.Cross(Vector3.Cross(forwardVector, upVector), -forwardVector);*/

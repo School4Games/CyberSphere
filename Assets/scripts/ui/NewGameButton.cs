@@ -7,7 +7,7 @@ public class NewGameButton : MonoBehaviour {
 	public GameObject menu;
 
 	void OnPress () {
-		if (Application.loadedLevel != 0 || menu.name != "Start Menu") {
+		if (Application.loadedLevel != 1 || menu.name != "Start Menu") {
 			Application.LoadLevel(0);
 			Destroy(mainMenu);
 		}

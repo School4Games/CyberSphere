@@ -105,7 +105,7 @@ public class SphereController : MonoBehaviour {
 			//make "stickier" somehow
 			rigidbody.AddForce(adhesionForce);
 		} 
-		else {
+		else if (rigidbody.velocity.magnitude < maxFallSpeed) {
 			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale, ForceMode.Force);
 		}
 	}
@@ -127,7 +127,7 @@ public class SphereController : MonoBehaviour {
 		}
 		if (health <= 0) {
 			if (!dead) {
-				effects.playEffect("dissolve");
+				//effects.playEffect("dissolve");
 			}
 			dead = true;
 			//press key to respawn
@@ -135,7 +135,7 @@ public class SphereController : MonoBehaviour {
 				transform.position = currentCheckpoint.position;
 				health = maxHealth;
 				dead = false;
-				effects.playEffect("combine");
+				//effects.playEffect("combine");
 			}
 		}
 	}

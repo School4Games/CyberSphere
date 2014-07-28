@@ -8,6 +8,7 @@ public class Checkpoint : MonoBehaviour {
 			SphereController sphereController = other.GetComponent("SphereController") as SphereController;
 			sphereController.currentCheckpoint = transform;
 			renderer.enabled = false;
+			collider.enabled = false;
 		}
 	}
 }
