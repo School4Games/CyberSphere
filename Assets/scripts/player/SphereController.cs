@@ -99,20 +99,23 @@ public class SphereController : MonoBehaviour {
 		rigidbody.useGravity = false;
 	}
 
-	// Update is called once per frame
-	void Update () {
-		move ();
-		spinGraphics ();
-		tint ();
-		//adjustFOV ();
+	void FixedUpdate () {
 		//turn off gravity when hanging on wall
 		if (spider && onGround) {
 			//make "stickier" somehow
 			rigidbody.AddForce(adhesionForce);
 		} 
 		else {
-			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale);
+			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale, ForceMode.Force);
 		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+		move ();
+		spinGraphics ();
+		tint ();
+		//adjustFOV ();
 		if (Input.GetButton("Fire2")) {
 			spider = true;
 		}
