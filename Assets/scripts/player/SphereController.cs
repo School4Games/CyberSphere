@@ -52,25 +52,10 @@ public class SphereController : MonoBehaviour {
 	bool dead = false;
 
 	bool onGround = false;
-	int groundColliders = 0;
-
-	void OnTriggerEnter () {
-		groundColliders++;
-		onGround = true;
-	}
 
 	void OnCollisionEnter (Collision collision) {
 		//for "friction" moving platforms etc
 		//transform.parent = collision.collider.gameObject.transform;
-	}
-
-	void OnTriggerExit () {
-		groundColliders--;
-		if (groundColliders <= 0) {
-			groundColliders = 0;
-			onGround = false;
-		}
-		transform.parent = null;
 	}
 
 	void OnCollisionStay (Collision collision) {
@@ -105,13 +90,23 @@ public class SphereController : MonoBehaviour {
 			//make "stickier" somehow
 			rigidbody.AddForce(adhesionForce);
 		} 
-		else if (rigidbody.velocity.magnitude < maxFallSpeed) {
+		else if (rigidbody.velocity.magnitude < maxFallSpeed || rigidbody.velocity.y >= 0) {
 			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale, ForceMode.Force);
 		}
 	}
 
+
+
 	// Update is called once per frame
 	void Update () {
+		//check if touching ground
+		int layermask = 1 << 0;
+		if (Physics.CheckSphere(transform.position, 0.7f, layermask)) {
+			onGround = true;
+		}
+		else {
+			onGround = false;
+		}
 		move ();
 		spinGraphics ();
 		tint ();
@@ -141,6 +136,7 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void OnGUI () {
+		GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), onGround.ToString() + "\n" + (-adhesionForce).ToString());
 		if (win) {
 			//show Win Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "You Win \n Congratulations :D");
@@ -195,15 +191,17 @@ public class SphereController : MonoBehaviour {
 
 		//jump orthogonal to ground
 		if (Input.GetButtonDown("Jump") && onGround) {
+			Debug.Log("jump");
 			//do calculation at start? somehow buggy at low framerates, though, best fix first
 			Vector3 v0 = new Vector3(0, Mathf.Sqrt(-2 * jumpHeight * gravity.y), 0);
 			v0 = -adhesionForce.normalized * v0.magnitude;
-			rigidbody.AddForce(v0, ForceMode.VelocityChange);
+			rigidbody.AddForce(new Vector3(0, 20, 0), ForceMode.VelocityChange);
+			Debug.Log(v0);
 		}
-		if (Input.GetButton("Jump")) {
+		/*if (Input.GetButton("Jump")) {
 			float v0 = Mathf.Sqrt(-2 * jumpHeight * gravity.y);
 			gravityMultiplier  = v0*v0/((jumpHeight+additionalJumpHeight)*gravity.magnitude)/2;
-		}
+		}*/
 		else {
 			gravityMultiplier  = 1;
 		}
@@ -214,6 +212,7 @@ public class SphereController : MonoBehaviour {
 			tumbleCountDown -= Time.deltaTime;
 			if (tumbleCountDown <= 0) {
 				trail.setActive(true);
+				//make quaternion and lerp? (see cameraController.pointUp())
 				//align with movement direction
 				float straightAngle = Vector3.Angle(graphics.forward, Vector3.Cross(-adhesionForce, rigidbody.velocity));
 				straightAngle = Mathf.Sqrt (straightAngle)/2;

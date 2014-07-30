@@ -65,7 +65,7 @@ public class TPCamera : MonoBehaviour {
 		}
 
 		//orbit
-		//should probably put in own parameter controling "sensitivity"
+		//should probably put in own parameter controlling "sensitivity"
 		if (Input.GetAxis("Horizontal") != 0) {
 			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Horizontal")) * -transform.right, Time.deltaTime * Mathf.Abs(Input.GetAxis("Horizontal")) * XSensitivity).normalized;
 		}
