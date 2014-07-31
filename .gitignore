@@ -37,3 +37,8 @@ Thumbs.db
 # ===== #
 CyberSphere_Data
 CyberSphere.exe
+
+# =============== #
+# Version Control #
+# =============== #
+*.orig
