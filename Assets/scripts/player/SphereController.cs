@@ -31,6 +31,7 @@ public class SphereController : MonoBehaviour {
 
 	public Transform graphics;
 	public Trail trail;
+
 	//time until sphere aligns with movement direction
 	//[s]
 	public float tumbleTime = 2;
@@ -45,13 +46,13 @@ public class SphereController : MonoBehaviour {
 	public Transform currentCheckpoint;
 
 	public float boostMultiplier = 1.5f;
+
 	//[s]
 	public float boostDuration = 2;
 
 	TriShatter effects;
 	bool dead = false;
-
-	bool onGround = false;
+	float jumpForce;
 
 	void OnCollisionEnter (Collision collision) {
 		//for "friction" moving platforms etc
@@ -82,31 +83,38 @@ public class SphereController : MonoBehaviour {
 		effects = graphics.GetComponent("TriShatter") as TriShatter;
 		tumbleCountDown = tumbleTime;
 		rigidbody.useGravity = false;
+		setJumpForce ();
 	}
 
 	void FixedUpdate () {
 		//turn off gravity when hanging on wall
-		if (spider && onGround) {
+		if (spider && isOnGround() && !Input.GetButton("Jump")) {
 			//make "stickier" somehow
-			rigidbody.AddForce(adhesionForce);
+			rigidbody.AddForce(adhesionForce * Time.timeScale );
 		} 
 		else if (rigidbody.velocity.magnitude < maxFallSpeed || rigidbody.velocity.y >= 0) {
 			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale, ForceMode.Force);
 		}
 	}
 
-
-
-	// Update is called once per frame
-	void Update () {
+	bool isOnGround () {
 		//check if touching ground
 		int layermask = 1 << 0;
 		if (Physics.CheckSphere(transform.position, 0.7f, layermask)) {
-			onGround = true;
+			return true;
 		}
 		else {
-			onGround = false;
+			return false;
 		}
+	}
+
+	void setJumpForce () {
+		//do calculation at start? somehow buggy at low framerates, though, best fix first
+		jumpForce = Mathf.Sqrt(-2 * jumpHeight * gravity.y);
+	}
+
+	// Update is called once per frame
+	void Update () {
 		move ();
 		spinGraphics ();
 		tint ();
@@ -119,6 +127,17 @@ public class SphereController : MonoBehaviour {
 		}
 		if (transform.position.y < 0) {
 			health = 0;
+		}
+		//jump orthogonal to ground
+		if (Input.GetButtonDown("Jump") && isOnGround()) {
+			jump ();
+		}
+		//glide
+		else if (Input.GetButton("Jump")) {
+			gravityMultiplier  = jumpForce*jumpForce/((jumpHeight+additionalJumpHeight)*gravity.magnitude)/2;
+		}
+		else {
+			gravityMultiplier  = 1;
 		}
 		if (health <= 0) {
 			if (!dead) {
@@ -136,7 +155,7 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), onGround.ToString() + "\n" + (-adhesionForce).ToString());
+		GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), isOnGround().ToString() + "\n" + (-adhesionForce).ToString());
 		if (win) {
 			//show Win Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "You Win \n Congratulations :D");
@@ -165,8 +184,12 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void move () {
+		//air control here
+		if (!isOnGround() || Input.GetButton("Jump")) {
+			return;
+		}
 		Vector3 upVector = Vector3.up;
-		if (spider && onGround) {
+		if (spider && isOnGround()) {
 			upVector = -adhesionForce;
 		}
 		Vector3 forwardVector = -Vector3.Cross(upVector, Camera.main.transform.right);
@@ -175,7 +198,7 @@ public class SphereController : MonoBehaviour {
 		inputDirection *= Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal")));
 
 		//what exactly was i thinking here? - - < ??? -_- works, though
-		if (Vector3.Angle(-inputDirection, -adhesionForce) < 90 - maxSlopeAngle && !spider) {
+		if (Vector3.Angle(-inputDirection, upVector) < 90 - maxSlopeAngle && !spider) {
 			inputDirection = Vector3.zero;
 		}
 
@@ -188,36 +211,35 @@ public class SphereController : MonoBehaviour {
 		//pretty simple way to almost ignore momentum 
 		Vector3 upwardVelocity = Vector3.Project(rigidbody.velocity, upVector);
 		rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, inputDirection * maxSpeed + upwardVelocity, zeroToMaxTime);
+	}
 
-		//jump orthogonal to ground
-		if (Input.GetButtonDown("Jump") && onGround) {
-			Debug.Log("jump");
-			//do calculation at start? somehow buggy at low framerates, though, best fix first
-			Vector3 v0 = new Vector3(0, Mathf.Sqrt(-2 * jumpHeight * gravity.y), 0);
-			v0 = -adhesionForce.normalized * v0.magnitude;
-			rigidbody.AddForce(new Vector3(0, 20, 0), ForceMode.VelocityChange);
-			Debug.Log(v0);
+	void jump () {
+		Vector3 upVector = -adhesionForce;
+		if (spider && isOnGround()) {
+			upVector = -adhesionForce;
 		}
-		/*if (Input.GetButton("Jump")) {
-			float v0 = Mathf.Sqrt(-2 * jumpHeight * gravity.y);
-			gravityMultiplier  = v0*v0/((jumpHeight+additionalJumpHeight)*gravity.magnitude)/2;
-		}*/
-		else {
-			gravityMultiplier  = 1;
-		}
+		upVector.Normalize ();
+		Debug.Log("jump");
+		Vector3 v0 = upVector.normalized * jumpForce;
+		rigidbody.AddForce(v0, ForceMode.VelocityChange);
+		Debug.Log(v0);
 	}
 
 	void spinGraphics () {
+		Vector3 upVector = Vector3.up;
+		if (spider && isOnGround()) {
+			upVector = -adhesionForce;
+		}
 		if (rigidbody.velocity.magnitude >= maxSpeed * 0.9f) {
 			tumbleCountDown -= Time.deltaTime;
 			if (tumbleCountDown <= 0) {
 				trail.setActive(true);
 				//make quaternion and lerp? (see cameraController.pointUp())
 				//align with movement direction
-				float straightAngle = Vector3.Angle(graphics.forward, Vector3.Cross(-adhesionForce, rigidbody.velocity));
+				float straightAngle = Vector3.Angle(graphics.forward, Vector3.Cross(upVector, rigidbody.velocity));
 				straightAngle = Mathf.Sqrt (straightAngle)/2;
 				Vector3 straightAxis = rigidbody.velocity;
-				int p = clockwisePrefix (straightAxis, graphics.forward, Vector3.Cross(rigidbody.velocity, -adhesionForce));
+				int p = Mathc.clockwisePrefix (straightAxis, graphics.forward, Vector3.Cross(rigidbody.velocity, upVector));
 				graphics.Rotate(straightAxis, p * straightAngle, Space.World);
 			}
 		}
@@ -226,19 +248,8 @@ public class SphereController : MonoBehaviour {
 			tumbleCountDown = tumbleTime;
 		}
 		float angle = 360 * ((rigidbody.velocity.magnitude * Time.deltaTime)/(2*Mathf.PI));
-		Vector3 axis = Vector3.Cross(-adhesionForce, rigidbody.velocity);
+		Vector3 axis = Vector3.Cross(upVector, rigidbody.velocity);
 		graphics.Rotate(axis, angle, Space.World);
-	}
-
-	//returns 1 if clockwise, -1 if counterclockwise
-	//can you put stuff like this in some sort of library?
-	int clockwisePrefix (Vector3 axis, Vector3 direction, Vector3 targetDirection) {
-		if (Vector3.Angle(Vector3.Cross(targetDirection, direction), axis) < 90) {
-			return 1;
-		}
-		else {
-			return -1;
-		}
 	}
 
 	void adjustFOV () {
