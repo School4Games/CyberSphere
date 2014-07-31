@@ -24,10 +24,10 @@ public class TPCamera : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		relativePosition = (player.position - transform.position).normalized;
+		relativePosition = (transform.position - player.position).normalized;
 		rotation = transform.rotation;
-		Screen.showCursor = false;
-		Screen.lockCursor = true;
+		/*Screen.showCursor = false;
+		Screen.lockCursor = true;*/
 		sphereController = player.GetComponent ("SphereController") as SphereController;
 	}
 	
@@ -36,6 +36,15 @@ public class TPCamera : MonoBehaviour {
 		rotate ();
 		follow ();
 		pointUp ();
+		checkCollision ();
+	}
+
+	void checkCollision () {
+		Ray ray = new Ray(player.position, relativePosition);
+		RaycastHit hitinfo;
+		if (Physics.Raycast(ray, out hitinfo, Vector3.Distance(player.position, transform.position))) {
+			transform.position = hitinfo.point;
+		}
 	}
 
 	void distanceBySpeed () {
@@ -56,7 +65,7 @@ public class TPCamera : MonoBehaviour {
 		}
 
 		//orbit
-		//should probably put in own parameter controling "sensitivity"
+		//should probably put in own parameter controlling "sensitivity"
 		if (Input.GetAxis("Horizontal") != 0) {
 			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Horizontal")) * -transform.right, Time.deltaTime * Mathf.Abs(Input.GetAxis("Horizontal")) * XSensitivity).normalized;
 		}
@@ -71,6 +80,12 @@ public class TPCamera : MonoBehaviour {
 			upVector = Vector3.up;
 		}
 		Vector3 forwardVector = player.position + transform.up * heightOffset - transform.position;
+		//upside down
+		/*if (Vector3.Angle(transform.up, upVector) > 90) {
+			Debug.Log ("örghs");
+			forwardVector = Vector3.Cross(Vector3.Cross(forwardVector, upVector), -forwardVector);
+		}
+		upVector = -Vector3.Cross(Vector3.Cross(forwardVector, upVector), -forwardVector);*/
 		rotation.SetLookRotation (forwardVector, upVector);
 		transform.rotation = Quaternion.Lerp (transform.rotation, rotation, Time.deltaTime * turnSluggishness);
 	}

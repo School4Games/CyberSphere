@@ -1,0 +1,377 @@
+fileFormatVersion: 2
+guid: 199a5119d89040e4b9359949f2e8dc78
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: CTRLS
+    100002: ElementBottomLeft
+    100004: ElementBottomRight
+    100006: ElementUpLeft
+    100008: ElementUpRight
+    100010: group1
+    100012: //RootNode
+    100014: LaserSocket
+    100016: MAIN
+    100018: MainCTRL
+    100020: MESH
+    100022: polySurface7
+    100024: ROOT
+    100026: SKEL
+    100028: Spike_BottomLeft
+    100030: Spike_BottomLeftCTRL
+    100032: Spike_BottomLeftCTRLnull
+    100034: Spike_BottomRight
+    100036: Spike_BottomRightCTRL
+    100038: Spike_BottomRightCTRLnull
+    100040: Spike_UpLeft
+    100042: Spike_UpLeftCTRL
+    100044: Spike_UpLeftCTRLnull
+    100046: Spike_UpRight
+    100048: Spike_UpRightCTRL
+    100050: Spike_UpRightCTRLnull
+    100052: SpikeRotate
+    100054: SpikeRotateCTRL
+    400000: CTRLS
+    400002: ElementBottomLeft
+    400004: ElementBottomRight
+    400006: ElementUpLeft
+    400008: ElementUpRight
+    400010: group1
+    400012: //RootNode
+    400014: LaserSocket
+    400016: MAIN
+    400018: MainCTRL
+    400020: MESH
+    400022: polySurface7
+    400024: ROOT
+    400026: SKEL
+    400028: Spike_BottomLeft
+    400030: Spike_BottomLeftCTRL
+    400032: Spike_BottomLeftCTRLnull
+    400034: Spike_BottomRight
+    400036: Spike_BottomRightCTRL
+    400038: Spike_BottomRightCTRLnull
+    400040: Spike_UpLeft
+    400042: Spike_UpLeftCTRL
+    400044: Spike_UpLeftCTRLnull
+    400046: Spike_UpRight
+    400048: Spike_UpRightCTRL
+    400050: Spike_UpRightCTRLnull
+    400052: SpikeRotate
+    400054: SpikeRotateCTRL
+    4300000: polySurface7
+    4300002: ElementBottomLeft
+    4300004: ElementBottomRight
+    4300006: ElementUpRight
+    4300008: ElementUpLeft
+    4300010: LaserSocket
+    7400000: Open
+    7400002: Spin
+    7400004: Close
+    9500000: //RootNode
+    13700000: ElementBottomLeft
+    13700002: ElementBottomRight
+    13700004: ElementUpLeft
+    13700006: ElementUpRight
+    13700008: LaserSocket
+    13700010: polySurface7
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Open
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 40
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: group1
+        weight: 1
+      - path: MAIN
+        weight: 1
+      - path: MAIN/CTRLS
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomLeftCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomLeftCTRLnull/Spike_BottomLeftCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomRightCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomRightCTRLnull/Spike_BottomRightCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpLeftCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpLeftCTRLnull/Spike_UpLeftCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpRightCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpRightCTRLnull/Spike_UpRightCTRL
+        weight: 1
+      - path: MAIN/MESH
+        weight: 1
+      - path: MAIN/MESH/ElementBottomLeft
+        weight: 1
+      - path: MAIN/MESH/ElementBottomRight
+        weight: 1
+      - path: MAIN/MESH/ElementUpLeft
+        weight: 1
+      - path: MAIN/MESH/ElementUpRight
+        weight: 1
+      - path: MAIN/MESH/LaserSocket
+        weight: 1
+      - path: MAIN/MESH/polySurface7
+        weight: 1
+      - path: MAIN/SKEL
+        weight: 1
+      - path: MAIN/SKEL/ROOT
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_BottomLeft
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_BottomRight
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_UpLeft
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_UpRight
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Spin
+      takeName: Take 001
+      firstFrame: 40
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: group1
+        weight: 1
+      - path: MAIN
+        weight: 1
+      - path: MAIN/CTRLS
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomLeftCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomLeftCTRLnull/Spike_BottomLeftCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomRightCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomRightCTRLnull/Spike_BottomRightCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpLeftCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpLeftCTRLnull/Spike_UpLeftCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpRightCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpRightCTRLnull/Spike_UpRightCTRL
+        weight: 1
+      - path: MAIN/MESH
+        weight: 1
+      - path: MAIN/MESH/ElementBottomLeft
+        weight: 1
+      - path: MAIN/MESH/ElementBottomRight
+        weight: 1
+      - path: MAIN/MESH/ElementUpLeft
+        weight: 1
+      - path: MAIN/MESH/ElementUpRight
+        weight: 1
+      - path: MAIN/MESH/LaserSocket
+        weight: 1
+      - path: MAIN/MESH/polySurface7
+        weight: 1
+      - path: MAIN/SKEL
+        weight: 1
+      - path: MAIN/SKEL/ROOT
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_BottomLeft
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_BottomRight
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_UpLeft
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_UpRight
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Close
+      takeName: Take 001
+      firstFrame: 70
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: group1
+        weight: 1
+      - path: MAIN
+        weight: 1
+      - path: MAIN/CTRLS
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomLeftCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomLeftCTRLnull/Spike_BottomLeftCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomRightCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_BottomRightCTRLnull/Spike_BottomRightCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpLeftCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpLeftCTRLnull/Spike_UpLeftCTRL
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpRightCTRLnull
+        weight: 1
+      - path: MAIN/CTRLS/MainCTRL/SpikeRotateCTRL/Spike_UpRightCTRLnull/Spike_UpRightCTRL
+        weight: 1
+      - path: MAIN/MESH
+        weight: 1
+      - path: MAIN/MESH/ElementBottomLeft
+        weight: 1
+      - path: MAIN/MESH/ElementBottomRight
+        weight: 1
+      - path: MAIN/MESH/ElementUpLeft
+        weight: 1
+      - path: MAIN/MESH/ElementUpRight
+        weight: 1
+      - path: MAIN/MESH/LaserSocket
+        weight: 1
+      - path: MAIN/MESH/polySurface7
+        weight: 1
+      - path: MAIN/SKEL
+        weight: 1
+      - path: MAIN/SKEL/ROOT
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_BottomLeft
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_BottomRight
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_UpLeft
+        weight: 1
+      - path: MAIN/SKEL/ROOT/SpikeRotate/Spike_UpRight
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .5
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 

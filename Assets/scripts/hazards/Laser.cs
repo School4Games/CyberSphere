@@ -8,9 +8,13 @@ public class Laser : MonoBehaviour {
 	public Transform beam;
 
 	public Transform sparks;
+	ParticleSystem sparticles;
+
+	public float dps = 10;
 
 	// Use this for initialization
 	void Start () {
+		sparticles = sparks.gameObject.GetComponent ("ParticleSystem") as ParticleSystem;
 		linerenderer = beam.gameObject.GetComponent("LineRenderer") as LineRenderer;
 		beam.parent = null;
 		linerenderer.useWorldSpace = true;
@@ -24,22 +28,21 @@ public class Laser : MonoBehaviour {
 		if (hitinfo.point != Vector3.zero) {
 			linerenderer.SetPosition (1, hitinfo.point);
 			sparks.position = hitinfo.point;
-			//sparks.gameObject.SetActive(true);
+			sparticles.enableEmission = true;
 			
 		}
 		else {
 			linerenderer.SetPosition (1, transform.position + transform.forward * 1000);
-			//sparks.gameObject.SetActive(false);
+			sparticles.enableEmission = false;
 		}
-		//damage sphere
-		/*GameObject sphere = hitinfo.collider.gameObject;
-		if (sphere.GetComponent("SphereController")) {
-			SphereController sphereController = sphere.GetComponent("SphereController") as SphereController;
-			GameObject graphics = sphereController.graphics.gameObject;
-			Color newColor = graphics.renderer.material.color;
-			newColor.r += Time.deltaTime * 10;
-			graphics.renderer.material.color = newColor;
-		}*/
+		if (hitinfo.collider) {
+			//damage sphere
+			GameObject sphere = hitinfo.collider.gameObject;
+			if (sphere.tag == "Player") {
+				SphereController sphereController = sphere.GetComponent("SphereController") as SphereController;
+				sphereController.health -= dps * Time.deltaTime;
+			}
+		}
 	}
 	
 	// Update is called once per frame
