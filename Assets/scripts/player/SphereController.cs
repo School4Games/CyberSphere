@@ -184,10 +184,6 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void move () {
-		//air control here
-		if (!isOnGround() || Input.GetButton("Jump")) {
-			return;
-		}
 		Vector3 upVector = Vector3.up;
 		if (spider && isOnGround()) {
 			upVector = -adhesionForce;
@@ -198,7 +194,7 @@ public class SphereController : MonoBehaviour {
 		inputDirection *= Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal")));
 
 		//what exactly was i thinking here? - - < ??? -_- works, though
-		if (Vector3.Angle(-inputDirection, upVector) < 90 - maxSlopeAngle && !spider) {
+		if (Vector3.Angle(-inputDirection, upVector) < 90 - maxSlopeAngle && !spider && isOnGround()) {
 			inputDirection = Vector3.zero;
 		}
 
@@ -208,9 +204,25 @@ public class SphereController : MonoBehaviour {
 		Debug.DrawLine(transform.position, transform.position + upVector, Color.green);
 		Debug.DrawLine(transform.position, transform.position + rightVector, Color.red);
 		Debug.DrawLine(transform.position, transform.position + forwardVector, Color.blue);
-		//pretty simple way to almost ignore momentum 
+
 		Vector3 upwardVelocity = Vector3.Project(rigidbody.velocity, upVector);
-		rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, inputDirection * maxSpeed + upwardVelocity, zeroToMaxTime);
+		Vector3 newVelocity = inputDirection * maxSpeed + upwardVelocity;
+		//air control here
+		if ((!isOnGround() || Input.GetButton("Jump"))) {
+			//add momentum
+			newVelocity = rigidbody.velocity;
+			//check if at max speed (in desired direction); if not add speed in that direction
+			if (Vector3.Project(rigidbody.velocity, inputDirection).magnitude < maxSpeed || Vector3.Angle(Vector3.Project(rigidbody.velocity, inputDirection), inputDirection) > 90){
+				newVelocity += inputDirection;
+			}
+			//add air friction
+			newVelocity -= upwardVelocity;
+			newVelocity *= 1 - Time.deltaTime;
+			newVelocity += upwardVelocity;
+		}
+
+		//pretty simple way to almost ignore momentum 
+		rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, newVelocity, zeroToMaxTime);
 	}
 
 	void jump () {
