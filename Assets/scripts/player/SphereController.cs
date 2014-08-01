@@ -54,12 +54,14 @@ public class SphereController : MonoBehaviour {
 	bool dead = false;
 	float jumpForce;
 
-	void OnCollisionEnter (Collision collision) {
-		//for "friction" moving platforms etc
-		//transform.parent = collision.collider.gameObject.transform;
-	}
-
 	void OnCollisionStay (Collision collision) {
+		//for "friction" moving platforms etc
+		if (collision.gameObject.tag == "moving") {
+			transform.parent = collision.collider.gameObject.transform;
+			if (Input.GetAxis("Vertical") < 0.1f && Input.GetAxis("Horizontal") < 0.1f) {
+				rigidbody.isKinematic = true;
+			}
+		}
 		adhesionForce = -collision.contacts[0].normal;
 		adhesionForce.Normalize();
 		adhesionForce *= Physics.gravity.magnitude;
@@ -118,6 +120,9 @@ public class SphereController : MonoBehaviour {
 		move ();
 		spinGraphics ();
 		tint ();
+		if (!isOnGround() && transform.parent != null) {
+			transform.parent = null;
+		}
 		//adjustFOV ();
 		if (Input.GetButton("Fire2")) {
 			spider = true;
@@ -221,8 +226,17 @@ public class SphereController : MonoBehaviour {
 			newVelocity += upwardVelocity;
 		}
 
-		//pretty simple way to almost ignore momentum 
-		rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, newVelocity, zeroToMaxTime);
+		//parenting of physics objects to simulate friction was definitely not a good idea (see mess below)
+		if (//activate physics while player is not parented to sth (e.g. moving platform), because physics make parenting work incorrectly
+			transform.parent == null 
+			//also activate physics for input
+		    || Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0 || Input.GetButton("Jump") 
+			//also if player should fall off (i.e. is below/ on side of platform)
+		    || (!spider && Vector3.Angle(-adhesionForce, Vector3.up) > 45)) {
+			rigidbody.isKinematic = false;
+			//pretty simple way to almost ignore momentum 
+			rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, newVelocity, zeroToMaxTime);
+		}
 	}
 
 	void jump () {
