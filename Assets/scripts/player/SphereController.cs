@@ -56,12 +56,12 @@ public class SphereController : MonoBehaviour {
 
 	void OnCollisionStay (Collision collision) {
 		//for "friction" moving platforms etc
-		if (collision.gameObject.tag == "moving") {
+		/*if (collision.gameObject.tag == "moving") {
 			transform.parent = collision.collider.gameObject.transform;
 			if (Input.GetAxis("Vertical") < 0.1f && Input.GetAxis("Horizontal") < 0.1f) {
 				rigidbody.isKinematic = true;
 			}
-		}
+		}*/
 		adhesionForce = -collision.contacts[0].normal;
 		adhesionForce.Normalize();
 		adhesionForce *= Physics.gravity.magnitude;
