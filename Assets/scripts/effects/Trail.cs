@@ -57,8 +57,21 @@ public class Trail : MonoBehaviour {
 			isActive = true;
 		}
 		else {
+			clearTrail ();
 			isActive = false;
 		}
+	}
+
+	void clearTrail () {
+		mesh.Clear();
+		vertices = new ArrayList(); 
+		triangles = new ArrayList();
+		uv = new ArrayList();
+		vert1 = 0;
+		vert2 = 0;
+		newVertices = new Vector3[4096];
+		newTriangles = new int[6144];
+		newUV = new Vector2[4096]; 
 	}
 
 	void newTrail () {
@@ -66,7 +79,6 @@ public class Trail : MonoBehaviour {
 		vertices.Add((parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
 		uv.Add(new Vector2(0, 1));
 		uv.Add(new Vector2(0, 0));
-		//test
 		createSegment ();
 	}
 	
@@ -89,7 +101,7 @@ public class Trail : MonoBehaviour {
 	}
 
 	void createSegment () {
-		while (vertices.Count >= 2048) {
+		while (vertices.Count > 512) {
 			vertices.RemoveRange(0, 2);
 			uv.RemoveRange(uv.Count-2, 2);
 			triangles.RemoveRange(triangles.Count-6, 6);
