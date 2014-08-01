@@ -10,6 +10,7 @@ public class Trail : MonoBehaviour {
 	public float segmentHeight = 1;
 
 	Transform parent;
+	SphereController sphereController;
 
 	public bool isActive = false;
 
@@ -30,6 +31,7 @@ public class Trail : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		parent = transform.parent;
+		sphereController = parent.GetComponent ("SphereController") as SphereController;
 		mesh = GetComponent<MeshFilter>().mesh;
 		mesh.MarkDynamic();
 		mesh.Clear();
@@ -87,14 +89,16 @@ public class Trail : MonoBehaviour {
 	}
 
 	void createSegment () {
-		if (vertices.Count >= 2048) {
+		while (vertices.Count >= 2048) {
 			vertices.RemoveRange(0, 2);
-			uv.RemoveRange(0, 2);
-			triangles.RemoveRange(triangles.Count-7, 6);
+			uv.RemoveRange(uv.Count-2, 2);
+			triangles.RemoveRange(triangles.Count-6, 6);
+			//Debug.Log (triangles[triangles.Count-7], triangles[triangles.Count-6], triangles[triangles.Count-5], triangles[triangles.Count-4], triangles[triangles.Count-3], triangles[triangles.Count-2]);
 		}
-		vertices.Add((parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
+		Vector3 vertOffset = Vector3.Cross(sphereController.graphics.forward, sphereController.rigidbody.velocity).normalized * 0.5f;
+		vertices.Add((parent.position - transform.position) + vertOffset * segmentHeight);
 		vert1 = vertices.Count-1;
-		vertices.Add((parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
+		vertices.Add((parent.position - transform.position) + vertOffset * -segmentHeight);
 		vert2 = vertices.Count-1;
 
 		uv.Add(new Vector2(uv.Count-3 + segmentWidth/segmentHeight, 1));

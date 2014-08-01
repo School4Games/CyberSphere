@@ -56,14 +56,14 @@ public class SphereController : MonoBehaviour {
 
 	void OnCollisionStay (Collision collision) {
 		//for "friction" moving platforms etc
-		/*if (collision.gameObject.tag == "moving") {
+		if (collision.gameObject.tag == "moving") {
 			Vector3 originalScale = transform.localScale;			
 			transform.parent = collision.collider.gameObject.transform.parent;
 			transform.localScale = originalScale;
 			if (Input.GetAxis("Vertical") < 0.1f && Input.GetAxis("Horizontal") < 0.1f) {
 				rigidbody.isKinematic = true;
 			}
-		}*/
+		}
 		adhesionForce = -collision.contacts[0].normal;
 		adhesionForce.Normalize();
 		adhesionForce *= Physics.gravity.magnitude;
@@ -258,7 +258,7 @@ public class SphereController : MonoBehaviour {
 		if (spider && isOnGround()) {
 			upVector = -adhesionForce;
 		}
-		if (rigidbody.velocity.magnitude >= maxSpeed * 0.9f) {
+		if (rigidbody.velocity.magnitude >= maxSpeed * 0.1f) {
 			tumbleCountDown -= Time.deltaTime;
 			if (tumbleCountDown <= 0) {
 				trail.setActive(true);
