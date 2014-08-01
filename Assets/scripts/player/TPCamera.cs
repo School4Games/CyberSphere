@@ -61,7 +61,7 @@ public class TPCamera : MonoBehaviour {
 			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Mouse X")) * -transform.right, Time.deltaTime * Mathf.Abs(Input.GetAxis("Mouse X")) * XSensitivity).normalized;
 		}
 		if (Input.GetAxis("Mouse Y") != 0) {
-			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Mouse Y")) * -upVector, Time.deltaTime * Mathf.Abs(Input.GetAxis("Mouse Y")) * YSensitivity).normalized;
+			relativePosition = Vector3.Lerp(relativePosition, Mathc.sign(Input.GetAxis("Mouse Y")) * -upVector.normalized, Time.deltaTime * Mathf.Abs(Input.GetAxis("Mouse Y")) * YSensitivity).normalized;
 		}
 
 		//orbit
