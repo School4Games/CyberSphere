@@ -64,6 +64,9 @@ public class SphereController : MonoBehaviour {
 				rigidbody.isKinematic = true;
 			}
 		}
+		else {
+			transform.parent = null;
+		}
 		adhesionForce = -collision.contacts[0].normal;
 		adhesionForce.Normalize();
 		adhesionForce *= Physics.gravity.magnitude;
@@ -162,7 +165,7 @@ public class SphereController : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), isOnGround().ToString() + "\n" + (-adhesionForce).ToString());
+		//GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), isOnGround().ToString() + "\n" + (-adhesionForce).ToString());
 		if (win) {
 			//show Win Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "You Win \n Congratulations :D");

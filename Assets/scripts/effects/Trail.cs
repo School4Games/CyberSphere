@@ -57,7 +57,7 @@ public class Trail : MonoBehaviour {
 			isActive = true;
 		}
 		else {
-			clearTrail ();
+			//clearTrail ();
 			isActive = false;
 		}
 	}
