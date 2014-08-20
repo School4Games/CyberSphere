@@ -2,68 +2,76 @@
 using System.Collections;
 
 public class SphereController : MonoBehaviour {
-
+	
 	public bool spider = true;
+	public bool spiderSurface = false;
 	public Vector3 adhesionForce = Vector3.down;
-
+	
 	public bool win = false;
-
+	
 	//[um/s] (unitymeters per second)
 	public float maxSpeed = 10;
 	float initialMaxSpeed;
-
+	
 	//[um/s]
 	public float maxFallSpeed = 20;
-
+	
 	//[s]
 	public float zeroToMaxTime = 0.5f;
-
+	
 	//[um]
 	public float jumpHeight = 2;
-
+	
 	//additional height gained when jumping holding down space
 	//[um]
 	public float additionalJumpHeight = 2;
-
+	
 	//[um/s²]
 	public Vector3 gravity = Vector3.down * 20;
 	float gravityMultiplier = 1;
-
+	
 	public Transform graphics;
 	public Trail trail;
-
+	
 	//time until sphere aligns with movement direction
 	//[s]
 	public float tumbleTime = 2;
 	float tumbleCountDown;
-
+	
 	//not used yet
 	public float maxSlopeAngle = 45;
-
+	
 	public float maxHealth = 100;
 	public float health = 100;
-
+	
 	public Transform currentCheckpoint;
-
+	
 	public float boostMultiplier = 1.5f;
-
+	
 	//[s]
 	public float boostDuration = 2;
-
+	
 	TriShatter effects;
 	bool dead = false;
 	float jumpForce;
-
+	
 	void OnCollisionStay (Collision collision) {
 		//for "friction" moving platforms etc
-		/*if (collision.gameObject.tag == "moving") {
-			Vector3 originalScale = transform.localScale;			
+		if (collision.gameObject.tag == "moving") {
 			transform.parent = collision.collider.gameObject.transform.parent;
-			transform.localScale = originalScale;
 			if (Input.GetAxis("Vertical") < 0.1f && Input.GetAxis("Horizontal") < 0.1f) {
 				rigidbody.isKinematic = true;
 			}
-		}*/
+		}
+		else {
+			transform.parent = null;
+		}
+		if (collision.gameObject.renderer.material.name.Contains("spiderwall")) {
+			spiderSurface = true;
+		}
+		else {
+			spiderSurface = false;
+		}
 		adhesionForce = -collision.contacts[0].normal;
 		adhesionForce.Normalize();
 		adhesionForce *= Physics.gravity.magnitude;
@@ -89,7 +97,7 @@ public class SphereController : MonoBehaviour {
 		rigidbody.useGravity = false;
 		setJumpForce ();
 	}
-
+	
 	void FixedUpdate () {
 		//turn off gravity when hanging on wall
 		if (spider && isOnGround() && !Input.GetButton("Jump")) {
@@ -100,8 +108,8 @@ public class SphereController : MonoBehaviour {
 			rigidbody.AddForce(gravity*gravityMultiplier*Time.timeScale, ForceMode.Force);
 		}
 	}
-
-	bool isOnGround () {
+	
+	public bool isOnGround () {
 		//check if touching ground
 		int layermask = 1 << 0;
 		if (Physics.CheckSphere(transform.position, 0.7f, layermask)) {
@@ -111,12 +119,12 @@ public class SphereController : MonoBehaviour {
 			return false;
 		}
 	}
-
+	
 	void setJumpForce () {
 		//do calculation at start? somehow buggy at low framerates, though, best fix first
 		jumpForce = Mathf.Sqrt(-2 * jumpHeight * gravity.y);
 	}
-
+	
 	// Update is called once per frame
 	void Update () {
 		move ();
@@ -126,7 +134,7 @@ public class SphereController : MonoBehaviour {
 			transform.parent = null;
 		}
 		//adjustFOV ();
-		if (Input.GetButton("Fire2")) {
+		if (Input.GetButton("Fire2") && spiderSurface) {
 			spider = true;
 		}
 		else {
@@ -160,9 +168,9 @@ public class SphereController : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	void OnGUI () {
-		GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), isOnGround().ToString() + "\n" + (-adhesionForce).ToString());
+		//GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), isOnGround().ToString() + "\n" + (-adhesionForce).ToString());
 		if (win) {
 			//show Win Message
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "You Win \n Congratulations :D");
@@ -172,24 +180,24 @@ public class SphereController : MonoBehaviour {
 			GUI.Label(new Rect(Screen.width/2 - 50, Screen.height/2 - 30, 100, 60), "Game Over \n Try again? \n (Press any key)");
 		}
 	}
-
+	
 	public void boost () {
 		StartCoroutine ("coBoost");
 	}
-
+	
 	IEnumerator coBoost () {
 		maxSpeed = initialMaxSpeed * boostMultiplier;
 		yield return new WaitForSeconds (boostDuration);
 		maxSpeed = initialMaxSpeed;
 	}
-
+	
 	void tint () {
 		Color newColor = graphics.renderer.material.color;
 		newColor.g = health/maxHealth;
 		newColor.b = health/maxHealth;
 		graphics.renderer.material.color = newColor;
 	}
-
+	
 	void move () {
 		Vector3 upVector = Vector3.up;
 		if (spider && isOnGround()) {
@@ -199,19 +207,19 @@ public class SphereController : MonoBehaviour {
 		Vector3 rightVector = Vector3.Cross(upVector, Camera.main.transform.forward);
 		Vector3 inputDirection = (rightVector * Input.GetAxis("Horizontal") + forwardVector * Input.GetAxis("Vertical")).normalized;
 		inputDirection *= Mathf.Max(Mathf.Abs(Input.GetAxis("Vertical")), Mathf.Abs(Input.GetAxis("Horizontal")));
-
+		
 		//what exactly was i thinking here? - - < ??? -_- works, though
 		if (Vector3.Angle(-inputDirection, upVector) < 90 - maxSlopeAngle && !spider && isOnGround()) {
 			inputDirection = Vector3.zero;
 		}
-
+		
 		upVector.Normalize();
 		forwardVector.Normalize();
 		rightVector.Normalize();
 		Debug.DrawLine(transform.position, transform.position + upVector, Color.green);
 		Debug.DrawLine(transform.position, transform.position + rightVector, Color.red);
 		Debug.DrawLine(transform.position, transform.position + forwardVector, Color.blue);
-
+		
 		Vector3 upwardVelocity = Vector3.Project(rigidbody.velocity, upVector);
 		Vector3 newVelocity = inputDirection * maxSpeed + upwardVelocity;
 		//air control here
@@ -227,38 +235,38 @@ public class SphereController : MonoBehaviour {
 			newVelocity *= 1 - Time.deltaTime;
 			newVelocity += upwardVelocity;
 		}
-
+		
 		//parenting of physics objects to simulate friction was definitely not a good idea (see mess below)
 		if (//activate physics while player is not parented to sth (e.g. moving platform), because physics make parenting work incorrectly
-			transform.parent == null 
-			//also activate physics for input
+		    transform.parent == null 
+		    //also activate physics for input
 		    || Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0 || Input.GetButton("Jump") 
-			//also if player should fall off (i.e. is below/ on side of platform)
+		    //also if player should fall off (i.e. is below/ on side of platform)
 		    || (!spider && Vector3.Angle(-adhesionForce, Vector3.up) > 45)) {
 			rigidbody.isKinematic = false;
 			//pretty simple way to almost ignore momentum 
 			rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, newVelocity, zeroToMaxTime);
 		}
 	}
-
+	
 	void jump () {
 		Vector3 upVector = -adhesionForce;
 		if (spider && isOnGround()) {
 			upVector = -adhesionForce;
 		}
 		upVector.Normalize ();
-		Debug.Log("jump");
+		//Debug.Log("jump");
 		Vector3 v0 = upVector.normalized * jumpForce;
 		rigidbody.AddForce(v0, ForceMode.VelocityChange);
-		Debug.Log(v0);
+		//Debug.Log(v0);
 	}
-
+	
 	void spinGraphics () {
 		Vector3 upVector = Vector3.up;
 		if (spider && isOnGround()) {
 			upVector = -adhesionForce;
 		}
-		if (rigidbody.velocity.magnitude >= maxSpeed * 0.9f) {
+		if (rigidbody.velocity.magnitude >= maxSpeed * 0.1f) {
 			tumbleCountDown -= Time.deltaTime;
 			if (tumbleCountDown <= 0) {
 				trail.setActive(true);
@@ -279,7 +287,7 @@ public class SphereController : MonoBehaviour {
 		Vector3 axis = Vector3.Cross(upVector, rigidbody.velocity);
 		graphics.Rotate(axis, angle, Space.World);
 	}
-
+	
 	void adjustFOV () {
 		Vector3 upVector = Vector3.up;
 		if (spider) {
@@ -287,7 +295,7 @@ public class SphereController : MonoBehaviour {
 		}
 		Vector3 forwardVector = Vector3.Cross(Camera.main.transform.right, upVector);
 		Vector3 rightVector = Vector3.Cross(Camera.main.transform.forward, upVector);
-
+		
 		if (Vector3.Angle(rigidbody.velocity, forwardVector) < 45) {
 			float fov = (1 + Mathf.Sqrt(Mathf.Max(rigidbody.velocity.magnitude - maxSpeed, 0) / maxSpeed)/2) * 60;
 			Camera.main.fieldOfView = fov;

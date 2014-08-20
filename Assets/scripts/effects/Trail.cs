@@ -10,8 +10,13 @@ public class Trail : MonoBehaviour {
 	public float segmentHeight = 1;
 
 	Transform parent;
+	SphereController sphereController;
 
 	public bool isActive = false;
+
+	public Gradient colorOverTime;
+
+	public int trailLength = 64;
 
 	int vert1;
 	int vert2;
@@ -25,11 +30,12 @@ public class Trail : MonoBehaviour {
 	int[] newTriangles = new int[6144];
 
 	ArrayList uv = new ArrayList();
-	Vector2[] newUV = new Vector2[4096]; 
+	Vector2[] newUV = new Vector2[4096];
 
 	// Use this for initialization
 	void Start () {
 		parent = transform.parent;
+		sphereController = parent.GetComponent ("SphereController") as SphereController;
 		mesh = GetComponent<MeshFilter>().mesh;
 		mesh.MarkDynamic();
 		mesh.Clear();
@@ -37,39 +43,20 @@ public class Trail : MonoBehaviour {
 		mesh.triangles = newTriangles;
 		mesh.uv = newUV;
 		//create starting vertices
-		vertices.Add((parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
-		vertices.Add((parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
-		uv.Add(new Vector2(0, 1));
-		uv.Add(new Vector2(0, 0));
+		vertices.Insert(0, (parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
+		vertices.Insert(0, (parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
+		uv.Insert(0, new Vector2(0, 1));
+		uv.Insert(0, new Vector2(0, 0));
 		//test
+		setColors();
 		createSegment ();
 	}
 
-	public void setActive (bool active) {
-		if (active == true) {
-			if (isActive) {
-				return;
-			}
-			newTrail ();
-			transform.parent = null;
-			isActive = true;
-		}
-		else {
-			isActive = false;
-		}
-	}
-
-	void newTrail () {
-		vertices.Add((parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
-		vertices.Add((parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
-		uv.Add(new Vector2(0, 1));
-		uv.Add(new Vector2(0, 0));
-		//test
-		createSegment ();
-	}
-	
 	// Update is called once per frame
 	void Update () {
+		if ((vertices.Count > trailLength || parent.rigidbody.velocity.magnitude < 0.5f) && vertices.Count > 2) {
+			decay ();
+		}
 		if (isActive) {
 			//when segmentWidth is reached, create new segment
 			if (Vector3.Distance(mesh.vertices[vert1], mesh.vertices[vert1-2]) >= segmentWidth) {
@@ -80,33 +67,86 @@ public class Trail : MonoBehaviour {
 		}
 	}
 
+	public void setActive (bool active) {
+		if (active == true) {
+			if (isActive) {
+				return;
+			}
+			//newTrail ();
+			transform.parent = null;
+			isActive = true;
+		}
+		else {
+			//clearTrail ();
+			//isActive = false;
+		}
+	}
+
+	void setColors () {
+		Color[] colors = new Color[4096];
+		for (int i=0; i<vertices.Count; i++) {
+			colors[i] = colorOverTime.Evaluate((float)i/(float)vertices.Count);
+		}
+		mesh.colors = colors;
+	}
+
+	void clearTrail () {
+		mesh.Clear();
+		vertices = new ArrayList(); 
+		triangles = new ArrayList();
+		uv = new ArrayList();
+		vert1 = 0;
+		vert2 = 0;
+		newVertices = new Vector3[4096];
+		newTriangles = new int[6144];
+		newUV = new Vector2[4096]; 
+	}
+
+	void newTrail () {
+		vertices.Insert(0, (parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
+		vertices.Insert(0, (parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
+		uv.Insert(0, new Vector2(0, 1));
+		uv.Insert(0, new Vector2(0, 0));
+		createSegment ();
+	}
+
 	void pull () {
-		newVertices[vert1] = (parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0);
-		newVertices[vert2] = (parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0);
+		Vector3 vertOffset = Vector3.Cross(sphereController.graphics.forward, sphereController.rigidbody.velocity).normalized * 0.5f;
+		newVertices[vert1] = (parent.position - transform.position) + vertOffset * segmentHeight;
+		newVertices[vert2] = (parent.position - transform.position) + vertOffset * -segmentHeight;
 		mesh.vertices = newVertices;
 	}
 
+	void decay () {
+		vertices.RemoveRange(vertices.Count-2, 2);
+		uv.RemoveRange(0, 2);
+		triangles.RemoveRange(0, 6);
+		Debug.Log ((vertices.Count-2) + ", " + (vertices.Count-1));
+		setColors();
+	}
+
 	void createSegment () {
-		if (vertices.Count >= 2048) {
-			vertices.RemoveRange(0, 2);
-			uv.RemoveRange(0, 2);
-			triangles.RemoveRange(triangles.Count-7, 6);
+		setColors();
+		//just in case ...
+		while (vertices.Count > 4000) {
+			decay ();
 		}
-		vertices.Add((parent.position - transform.position) + new Vector3(0,0.5f * segmentHeight,0));
+		Vector3 vertOffset = Vector3.Cross(sphereController.graphics.forward, sphereController.rigidbody.velocity).normalized * 0.5f;
+		vertices.Insert(0, (parent.position - transform.position) + vertOffset * segmentHeight);
 		vert1 = vertices.Count-1;
-		vertices.Add((parent.position - transform.position) + new Vector3(0,-0.5f * segmentHeight,0));
+		vertices.Insert(0, (parent.position - transform.position) + vertOffset * -segmentHeight);
 		vert2 = vertices.Count-1;
 
-		uv.Add(new Vector2(uv.Count-3 + segmentWidth/segmentHeight, 1));
-		uv.Add(new Vector2(uv.Count-3 + segmentWidth/segmentHeight, 0));
+		uv.Insert(0, new Vector2(uv.Count-3 + segmentWidth/segmentHeight, 1));
+		uv.Insert(0, new Vector2(uv.Count-3 + segmentWidth/segmentHeight, 0));
 
-		triangles.Add(vertices.Count-1);
-		triangles.Add(vertices.Count-2);
-		triangles.Add(vertices.Count-3);
-
-		triangles.Add(vertices.Count-2);
-		triangles.Add(vertices.Count-4);
-		triangles.Add(vertices.Count-3);
+		triangles.Insert(0, vertices.Count-2);
+		triangles.Insert(0, vertices.Count-3);
+		triangles.Insert(0, vertices.Count-1);
+		
+		triangles.Insert(0, vertices.Count-2);
+		triangles.Insert(0, vertices.Count-1);
+		triangles.Insert(0, vertices.Count-0);
 
 		vertices.CopyTo(newVertices);
 		uv.CopyTo(newUV);
